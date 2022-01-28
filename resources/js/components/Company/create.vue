@@ -32,12 +32,12 @@ export default {
                 if(store.getters.getOk){
                 store.dispatch("fetchCompanyInit");
                 this.$emit("hide");
-                store.dispatch('getCompanys',this);
+                store.dispatch('getCompanies',this);
             }}, 300);
 
         },
-        getCompanys(){
-            store.dispatch('getCompanys',this);
+        getCompanies(){
+            store.dispatch('getCompanies',this);
         }
     },
     created(){

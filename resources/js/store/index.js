@@ -20,7 +20,7 @@ export default new Vuex.Store({
             password_confirmation:"",
             company_id:0
         },
-        companys:[],
+        companies:[],
         company:{
             id:0,
             name:"",
@@ -57,8 +57,8 @@ export default new Vuex.Store({
         setUserPasswordConfirmation(state,data){
             state.user.password_confirmation=data;
         },
-        setCompanys(state,data){
-            state.companys=data;
+        setCompanies(state,data){
+            state.companies=data;
         },
         setCompany(state,data){
             state.company=data;
@@ -112,10 +112,10 @@ export default new Vuex.Store({
             state.commit("setUserPassword","");
             state.commit("setUserPasswordConfirmation","");
         },
-        async getCompanys(state,VueComponent){
+        async getCompanies(state,VueComponent){
             VueComponent.$http.get(urlCompany+"list")
             .then(response=>{
-                state.commit("setCompanys",response.data.companys);
+                state.commit("setCompanies",response.data.companies);
             })
         },
         async createCompany(state,VueComponent){
@@ -142,7 +142,8 @@ export default new Vuex.Store({
             state.commit("setCompanyDescription","");
         },
         async updateUser(state,VueComponent){
-            VueComponent.$http.put(urlUser+"update",{user:state.getters.getUser,id:state.getters.getUserId})
+            const id=state.getters.getUserId;
+            VueComponent.$http.put(urlUser+"update/"+id,{user:state.getters.getUser})
             .then(response=>{
                 state.commit("setOk",true);
                 console.log(response)
@@ -173,7 +174,7 @@ export default new Vuex.Store({
         },
         updateCompany(state,VueComponent){
             const id = state.getters.getCompanyId;
-            VueComponent.$http.put(urlCompany+"update",{company:state.getters.getCompany,id:id})
+            VueComponent.$http.put(urlCompany+"update/"+id,{company:state.getters.getCompany})
             .then(response=>{
                 console.log(response);
                 state.commit("setOk",true);
@@ -188,7 +189,7 @@ export default new Vuex.Store({
         getUsers : state=>state.users,
         getUser : state=>state.user,
         getUserId : state=>state.user.id,
-        getCompanys : state=>state.companys,
+        getCompanies : state=>state.companies,
         getCompany : state=>state.company,
         getCompanyId : state=>state.company.id,
         getCompanyName : state=>state.company.name,

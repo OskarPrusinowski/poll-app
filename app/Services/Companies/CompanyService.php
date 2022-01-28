@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Services\Company;
+namespace App\Services\Companies;
 
-use App\Models\Company;
-use Illuminate\Http\Request;
+use App\Models\Companies\Company;
 
 class CompanyService{
 
@@ -14,19 +13,13 @@ class CompanyService{
         $this->companyModel=$companyModel;
     }
 
-    public function getCompanysList()
-    {
-        return $this->companyModel->all();
-    }
-
     public function getCompany($id)
     {
         return $this->companyModel->find($id);
     }
 
-    public function createCompany(Request $request)
+    public function createCompany($company)
     {
-        $company=$request->all()['company'];
         $this->companyModel::create($company);
         return true;
     }
@@ -36,11 +29,9 @@ class CompanyService{
         $this->companyModel->destroy($id);
     }
 
-    public function updateCompany(Request $request,$id)
+    public function updateCompany($newCompany,$id)
     {
-        $input=$request->all();
         $company=$this->getCompany($id);
-        $company->update($input['company']);
+        $company->update($newCompany);
     }
-
 }

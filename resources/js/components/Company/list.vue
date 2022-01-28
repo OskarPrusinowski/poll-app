@@ -10,7 +10,7 @@
                 <td>Edytuj</td>
                 <td>Usuń</td>
             </tr>
-            <tr v-for="company in companys" :key="company.id">
+            <tr v-for="company in companies" :key="company.id">
                 <td>{{company.id}}</td>
                 <td>{{company.name}}</td>
                 <td>{{company.compressed_name}}</td>
@@ -41,8 +41,8 @@ export default {
         update:update
     },
     computed:{
-        companys(){
-            return store.getters.getCompanys;
+        companies(){
+            return store.getters.getCompanies;
         }
     },
     data(){
@@ -54,13 +54,13 @@ export default {
     }
     ,
     methods:{
-        getCompanys(){
-            store.dispatch("getCompanys",this);
+        getCompanies(){
+            store.dispatch("getCompanies",this);
         },
         deleteCompany(id){
             store.commit("setCompanyId",id);
             store.dispatch("deleteCompany",this);
-            store.dispatch("getCompanys",this);
+            store.dispatch("getCompanies",this);
         },
         showCreateForm(){
             if(this.showUpdateDialog){
@@ -89,7 +89,7 @@ export default {
         }
     },
     created(){
-        this.getCompanys();
+        this.getCompanies();
     }
 }
 </script>

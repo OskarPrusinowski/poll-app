@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->string('compressed_name');
             $table->text('description');
             $table->timestamps();
+            ///$table->softDeletes();
         });
     }
 

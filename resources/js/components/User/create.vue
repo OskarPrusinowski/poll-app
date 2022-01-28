@@ -5,7 +5,7 @@
             <input type="text" name="name" v-model="user.name"></div>
             <div class="input_row"><label for="surname">Nazwisko</label>
             <input type="text" name="surname" v-model="user.surname"></div>
-           <div class="input_row"> <label for="login">Login</label>
+            <div class="input_row"> <label for="login">Login</label>
             <input type="text" name="login" v-model="user.login"></div>
             <div class="input_row"><label for="email">Email</label>
             <input type="email" name="email" v-model="user.email"></div>
@@ -17,7 +17,7 @@
                 <label for="company">Firma</label>
             <select name="company" v-model="user.company_id" class="select_comapny">
                 <option value="0" >Brak</option>
-                <option v-for="company in companys" :key="company.id" :value="company.id">{{company.name}}</option>
+                <option v-for="company in companies" :key="company.id" :value="company.id">{{company.name}}</option>
             </select>
             </div>
         <button type="submit" @click="$emit('hide')">Anuluj</button>
@@ -33,7 +33,7 @@ export default {
         user(){
             return store.getters.getUser;
         },
-        companys(){
+        companies(){
             return store.getters.getCompanys;
         }
     },

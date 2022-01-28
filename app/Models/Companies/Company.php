@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Companies;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Users\User;
 
 class Company extends Model
 {

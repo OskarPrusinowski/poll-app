@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Companies;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUpdateUser extends FormRequest
+class CreateUpdateCompany extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,10 @@ class CreateUpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'user.name'=>'required|string|min:3|max:20',
-            'user.surname'=>'required|string|min:3|max:30',
-            'user.login'=>'required|string|min:5|max:15',
-            'user.email'=>'required|email',
-            'user.password'=>'required|confirmed|min:8|max:20',
-            'user.company_id'=>'integer'
+            'company.name'=>'required|string|min:5|max:30|unique:companies,name',
+            'company.compressed_name'=>'required|string|min:2|max:10|unique:companies,compressed_name',
+            'company.description'=>'required|string|min:5',
         ];
     }
+
 }

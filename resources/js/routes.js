@@ -1,8 +1,6 @@
 import UserList from './components/User/list'
-import UserCreate from './components/User/create'
 
 import CompanyList from './components/Company/list'
-import CompanyCreate from './components/Company/create'
 
 
 export default{

@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->integer('company_id')->default(0);
+            //$table->integer('company_id')->foregin;
         });
     }
 

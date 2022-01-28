@@ -30,7 +30,6 @@
                 </td>
             </tr>
         </table>
-
         <create :show="showDialog" v-on:hide="showCreateForm()"/>
         <update :id="id" :show="showUpdateDialog" v-on:hide="hideUpdateForm()"/>
     </div>
@@ -52,8 +51,7 @@ export default {
             showUpdateDialog:false,
             id:0
         }
-    }
-    ,
+    },
     computed:{
         users(){
             return store.getters.getUsers;
