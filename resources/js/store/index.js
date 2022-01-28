@@ -4,8 +4,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
-const urlUser="http://127.0.0.1:8000/api/user/";
-const urlCompany="http://127.0.0.1:8000/api/company/";
+const urlUser="http://127.0.0.1:8000/main-api/users/";
+const urlCompany="http://127.0.0.1:8000/main-api/companies/";
 
 export default new Vuex.Store({
     state:{

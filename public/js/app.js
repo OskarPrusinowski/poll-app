@@ -660,8 +660,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
-var urlUser = "http://127.0.0.1:8000/api/user/";
-var urlCompany = "http://127.0.0.1:8000/api/company/";
+var urlUser = "http://127.0.0.1:8000/main-api/users/";
+var urlCompany = "http://127.0.0.1:8000/main-api/companies/";
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
     users: [],

@@ -24,25 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix'=>'/user'],function(){
 
-    Route::get('/list',[UsersController::class,'index']);
-
-
-    Route::get('/show/{id}',[UserController::class,'show']);
-    Route::post('/create',[UserController::class,'create']);
-    Route::delete('/delete/{id}',[UserController::class,'destroy']);
-    Route::put('/update/{id}',[UserController::class,'update']);
-
-});
-
-Route::group(['prefix'=>'/company'],function(){
-
-    Route::get('/list',[CompaniesController::class,'index']);
-
-    Route::get('/show/{id}',[CompanyController::class,'show']);
-    Route::post('/create',[CompanyController::class,'create']);
-    Route::delete('/delete/{id}',[CompanyController::class,'destroy']);
-    Route::put('/update/{id}',[CompanyController::class,'update']);
-});
 
