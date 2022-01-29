@@ -308,7 +308,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].getters.getUser;
     },
     companies: function companies() {
-      return _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].getters.getCompanys;
+      return _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].getters.getCompanies;
     }
   },
   methods: {
@@ -340,13 +340,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    getCompanys: function getCompanys() {
-      _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch('getCompanys', this);
+    getCompanies: function getCompanies() {
+      _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch('getCompanies', this);
     }
   },
   created: function created() {
     _store_index__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("fetchUserInit");
-    this.getCompanys();
+    this.getCompanies();
   }
 });
 
@@ -511,8 +511,8 @@ __webpack_require__.r(__webpack_exports__);
     user: function user() {
       return _store_index__WEBPACK_IMPORTED_MODULE_0__["default"].getters.getUser;
     },
-    companys: function companys() {
-      return _store_index__WEBPACK_IMPORTED_MODULE_0__["default"].getters.getCompanys;
+    companies: function companies() {
+      return _store_index__WEBPACK_IMPORTED_MODULE_0__["default"].getters.getCompanies;
     }
   },
   methods: {
@@ -531,8 +531,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       }, 300);
     },
-    getCompanys: function getCompanys() {
-      _store_index__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('getCompanys', this);
+    getCompanies: function getCompanies() {
+      _store_index__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('getCompanies', this);
     },
     getUser: function getUser() {
       _store_index__WEBPACK_IMPORTED_MODULE_0__["default"].commit("setUserId", id);
@@ -541,7 +541,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     _store_index__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch("fetchUserInit");
-    this.getCompanys();
+    this.getCompanies();
     this.getUser();
   }
 });
@@ -3879,7 +3879,7 @@ var render = function () {
           [
             _c("option", { attrs: { value: "0" } }, [_vm._v("Brak")]),
             _vm._v(" "),
-            _vm._l(_vm.companys, function (company) {
+            _vm._l(_vm.companies, function (company) {
               return _c(
                 "option",
                 { key: company.id, domProps: { value: company.id } },

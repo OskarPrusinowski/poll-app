@@ -2,13 +2,14 @@
 
 namespace App\Models\Companies;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Users\User;
 
 class Company extends Model
 {
-    use HasFactory;
+    use HasFactory,softDeletes;
 
     protected $fillable=[
         'name',

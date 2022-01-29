@@ -17,7 +17,7 @@
                 <label for="company">Firma</label>
             <select name="company" v-model="user.company_id" class="select_comapny">
                 <option value="0" >Brak</option>
-                <option v-for="company in companys" :key="company.id" :value="company.id">{{company.name}}</option>
+                <option v-for="company in companies" :key="company.id" :value="company.id">{{company.name}}</option>
             </select>
             </div>
         <button type="submit" @click="$emit('hide')">Anuluj</button>
@@ -33,8 +33,8 @@ export default {
         user(){
             return store.getters.getUser;
         },
-        companys(){
-            return store.getters.getCompanys;
+        companies(){
+            return store.getters.getCompanies;
         }
     },
     methods:{
@@ -48,8 +48,8 @@ export default {
                 store.dispatch("getUsers",this);
             }}, 300);
         },
-        getCompanys(){
-            store.dispatch('getCompanys',this);
+        getCompanies(){
+            store.dispatch('getCompanies',this);
         },
         getUser(){
             store.commit("setUserId",id);
@@ -58,7 +58,7 @@ export default {
     },
     created(){
         store.dispatch("fetchUserInit");
-        this.getCompanys();
+        this.getCompanies();
         this.getUser();
     }
 

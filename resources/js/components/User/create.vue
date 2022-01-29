@@ -34,7 +34,7 @@ export default {
             return store.getters.getUser;
         },
         companies(){
-            return store.getters.getCompanys;
+            return store.getters.getCompanies;
         }
     },
     methods:{
@@ -49,13 +49,13 @@ export default {
             }}, 300);
 
         },
-        getCompanys(){
-            store.dispatch('getCompanys',this);
+        getCompanies(){
+            store.dispatch('getCompanies',this);
         }
     },
     created(){
         store.dispatch("fetchUserInit");
-        this.getCompanys()
+        this.getCompanies()
     }
 
 }
