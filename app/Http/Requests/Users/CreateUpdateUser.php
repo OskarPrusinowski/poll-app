@@ -29,7 +29,7 @@ class CreateUpdateUser extends FormRequest
             'user.login'=>'required|string|min:5|max:15',
             'user.email'=>'required|email',
             'user.password'=>'required|confirmed|min:8|max:20',
-            'user.company_id'=>'integer'
+            'user.company_id'=>'integer|nullable'
         ];
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <button @click="showCreateForm()">Create user</button>
+        <button @click="showCreateForm()">Stwórz użytkownika</button>
         <table class="content">
             <tr>
                 <td>Id</td>
@@ -30,8 +30,8 @@
                 </td>
             </tr>
         </table>
-        <create :show="showDialog" v-on:hide="showCreateForm()"/>
-        <update :id="id" :show="showUpdateDialog" v-on:hide="hideUpdateForm()"/>
+        <create :show="showDialog" @hide="showCreateForm()"/>
+        <update :id="id" :show="showUpdateDialog" @hide="hideUpdateForm()"/>
     </div>
 </template>
 

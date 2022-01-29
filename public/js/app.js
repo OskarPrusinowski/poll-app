@@ -673,7 +673,7 @@ var urlCompany = "http://127.0.0.1:8000/main-api/companies/";
       email: "",
       password: "",
       password_confirmation: "",
-      company_id: 0
+      company_id: null
     },
     companies: [],
     company: {
@@ -3005,7 +3005,7 @@ var render = function () {
             },
           },
         },
-        [_vm._v("Create company")]
+        [_vm._v("Stwórz firmę")]
       ),
       _vm._v(" "),
       _c(
@@ -3467,7 +3467,7 @@ var render = function () {
             },
           },
           [
-            _c("option", { attrs: { value: "0" } }, [_vm._v("Brak")]),
+            _c("option", { attrs: { value: "null" } }, [_vm._v("Brak")]),
             _vm._v(" "),
             _vm._l(_vm.companies, function (company) {
               return _c(
@@ -3545,7 +3545,7 @@ var render = function () {
             },
           },
         },
-        [_vm._v("Create user")]
+        [_vm._v("Stwórz użytkownika")]
       ),
       _vm._v(" "),
       _c(
@@ -3877,7 +3877,7 @@ var render = function () {
             },
           },
           [
-            _c("option", { attrs: { value: "0" } }, [_vm._v("Brak")]),
+            _c("option", { attrs: { value: "null" } }, [_vm._v("Brak")]),
             _vm._v(" "),
             _vm._l(_vm.companies, function (company) {
               return _c(

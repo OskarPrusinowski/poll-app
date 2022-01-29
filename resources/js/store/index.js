@@ -18,7 +18,7 @@ export default new Vuex.Store({
             email:"",
             password:"",
             password_confirmation:"",
-            company_id:0
+            company_id:null
         },
         companies:[],
         company:{

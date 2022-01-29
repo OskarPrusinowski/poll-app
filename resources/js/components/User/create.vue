@@ -16,7 +16,7 @@
             <div class="input_row">
                 <label for="company">Firma</label>
             <select name="company" v-model="user.company_id" class="select_comapny">
-                <option value="0" >Brak</option>
+                <option value=null >Brak</option>
                 <option v-for="company in companies" :key="company.id" :value="company.id">{{company.name}}</option>
             </select>
             </div>
