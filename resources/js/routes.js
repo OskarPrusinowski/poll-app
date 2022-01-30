@@ -1,6 +1,6 @@
-import UserList from './components/User/list'
+import UserList from './components/Users/list'
 
-import CompanyList from './components/Company/list'
+import CompanyList from './components/Companies/list'
 
 
 export default{
