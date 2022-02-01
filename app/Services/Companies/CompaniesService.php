@@ -18,4 +18,10 @@ class CompaniesService{
         return $this->companyModel->all();
     }
 
+
+    public function deleteCompanies($ids)
+    {
+        $this->companyModel->destroy($ids);
+        return true;
+    }
 }

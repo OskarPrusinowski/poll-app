@@ -2,17 +2,18 @@ const urlCompany = "http://127.0.0.1:8000/main-api/companies/";
 
 const state = {
     companies: [],
+    companiesIds:[],
     company: {
         id: 0,
         name: "",
         compressed_name: "",
         description: ""
     },
-    ok: true
 };
 
 const getters = {
     getCompanies: state => state.companies,
+    getCompaniesIds: state => state.companiesIds,
     getCompany: state => state.company,
     getCompanyId: state => state.company.id,
     getCompanyName: state => state.company.name,
@@ -40,8 +41,8 @@ const mutations = {
     setCompanyDescription(state, data) {
         state.company.description = data;
     },
-    setOk(state, data) {
-        state.ok = data;
+    setCompaniesIds(state,data){
+        state.companiesIds=data;
     }
 };
 
@@ -50,6 +51,7 @@ const actions = {
         VueComponent.$http.get(urlCompany + "list")
             .then(response => {
                 state.commit("setCompanies", response.data.companies);
+                console.log(response.data.companies)
             })
     },
     async createCompany(state, VueComponent) {
@@ -94,6 +96,12 @@ const actions = {
                 console.log(error);
                 state.commit("setOk", false);
             })
+    },
+    deleteCompanies(state,VueComponent){
+        VueComponent.$http.post(urlCompany+"delete",{ids:state.getters.getCompaniesIds})
+        .then(response=>{
+            console.log(response);
+        })
     }
 };
 

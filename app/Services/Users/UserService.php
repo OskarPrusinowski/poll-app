@@ -35,6 +35,7 @@ class UserService{
     public function updateUser($newUser,$id)
     {
         $user=$this->getUser($id);
+        $newUser['company_id']= $newUser['company'];
         $user->update($newUser);
     }
 }

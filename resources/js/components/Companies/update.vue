@@ -1,60 +1,97 @@
 <template>
-  <div v-show="show" class="example">
-    <div class="input_row">
-      <div>
-        <label for="name">Nazwa</label>
-        <input type="text" name="name" v-model="company.name" />
-      </div>
-      <div class="input_row">
-        <label for="compressed_name">Skrócona nazwa</label>
-        <input
-          type="text"
-          name="compressed_name"
-          v-model="company.compressed_name"
-        />
-      </div>
-      <div class="input_row">
-        <label for="description">Opis</label>
-        <input type="text" name="description" v-model="company.description" />
-      </div>
-    </div>
-    <button type="submit" @click="$emit('hide')">Anuluj</button>
-    <button type="submit" @click="updateCompany(company)">Edytuj firmę</button>
-  </div>
+  <v-form ref="form">
+    <div class="text-center">
+      <v-dialog v-model="dialog" max-width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn color="blue lighten-8" dark v-bind="attrs" v-on="on">
+            <v-icon dark> mdi-pencil </v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title> Edytuj firmę </v-card-title>
+          <v-divider></v-divider>
+          <v-col class="ma-0 pb-0 pt-0" md="10">
+            <v-text-field
+              label="Nazwa"
+              outlined
+              v-model="company.name"
+              :rules="[rules.required, rules.min, rules.max]"
+            ></v-text-field>
+          </v-col>
+          <v-col class="ma-0 pb-0 pt-0" md="10">
+            <v-text-field
+              label="Skrócona nazwa"
+              outlined
+              v-model="company.compressed_name"
+              :rules="[rules.required, rules.min, rules.max]"
+            ></v-text-field>
+          </v-col>
+          <v-col class="ma-0 pb-0 pt-0" md="10">
+            <v-text-field
+              label="Opis"
+              outlined
+              v-model="company.description"
+              :rules="[rules.required, rules.min]"
+            ></v-text-field>
+          </v-col>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn depressed color="error" type="submit" @click="dialog = false"
+              >Anuluj</v-btn
+            >
+            <v-btn depressed color="primary" @click="submit()"
+              >Edytuj firmę</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div></v-form
+  >
 </template>
 
 <script>
 import store from "../../store/index";
 export default {
-  props: ["show", "id"],
-  computed: {
-    company() {
-      return store.getters.getCompany;
-    },
+  props: ["company"],
+  data() {
+    return {
+      dialog: false,
+      rules: {
+        required: (value) => !!value || "Wymagane.",
+        max: (value) => value.length <= 20 || "Musi zawierać do 20 liter",
+        min: (value) => 3 <= value.length || "Musi zawierać od 3 liter",
+        email: (value) => {
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || "Nieprawidłowy email";
+        },
+      },
+    };
   },
   methods: {
     updateCompany(company) {
       store.commit("setCompany", company);
       store.dispatch("updateCompany", this);
-      setTimeout(() => {
-        if (store.getters.getOk) {
-          store.dispatch("fetchCompanyInit");
-          this.$emit("hide");
-          store.dispatch("getCompanies", this);
-        }
-      }, 300);
+      this.dialog = false;
+      store.dispatch("getCompanies", this);
     },
     getCompanies() {
       store.dispatch("getCompanies", this);
     },
-    getCompany() {
-      store.commit("setCompanyId", id);
-      store.dispatch("getCompany", this);
+    submit() {
+      if (this.$refs.form.validate()) {
+        this.updateCompany(this.company);
+      }
     },
   },
   created() {
     store.dispatch("fetchCompanyInit");
-    this.getCompany();
+  },
+  watch: {
+    dialog() {
+      this.$refs.form.reset();
+    },
   },
 };
 </script>

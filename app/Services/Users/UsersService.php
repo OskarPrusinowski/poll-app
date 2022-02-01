@@ -18,6 +18,10 @@ class UsersService{
         return $this->userModel->with("company")->get();
     }
 
-    
+    public function deleteUsers($ids)
+    {
+        $this->userModel->destroy($ids);
+        return true;
+    }
 
 }

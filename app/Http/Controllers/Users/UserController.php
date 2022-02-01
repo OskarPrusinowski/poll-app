@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\CreateUpdateUser;
 use App\Services\Users\UserService;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     protected UserService $userService;
 
     public function __construct(UserService $userService)
@@ -19,7 +19,8 @@ class UserController extends Controller
 
     public function create(CreateUpdateUser $request)
     {
-        $this->userService->createUser($request->get('user'));
+        $newUser=$request->get('user');
+        $this->userService->createUser($newUser);
     }
 
     public function show($id)
@@ -28,10 +29,10 @@ class UserController extends Controller
         return response()->json(['user'=>$user]);
     }
 
-    public function update(CreateUpdateUser $request,$id)
+    public function update(CreateUpdateUser $request, $id)
     {
         $newUser=$request->get('user');
-        $this->userService->updateUser($newUser,$id);
+        $this->userService->updateUser($newUser, $id);
     }
 
 

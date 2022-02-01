@@ -24,9 +24,9 @@ class CreateUpdateCompany extends FormRequest
     public function rules()
     {
         return [
-            'company.name'=>'required|string|min:5|max:30',
-            'company.compressed_name'=>'required|string|min:2|max:10',
-            'company.description'=>'required|string|min:5',
+            'company.name'=>'required|string|min:3|max:20',
+            'company.compressed_name'=>'required|string|min:3|max:20',
+            'company.description'=>'required|string|min:3',
         ];
     }
 

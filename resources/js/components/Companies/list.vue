@@ -1,34 +1,48 @@
 <template>
   <div class="content">
-    <button @click="showCreateForm()">Stwórz firmę</button>
-    <table class="content">
-      <tr>
-        <td>Id</td>
-        <td>Nazwa</td>
-        <td>Skrócona nazwa</td>
-        <td>Opis</td>
-        <td>Edytuj</td>
-        <td>Usuń</td>
-      </tr>
-      <tr v-for="company in companies" :key="company.id">
-        <td>{{ company.id }}</td>
-        <td>{{ company.name }}</td>
-        <td>{{ company.compressed_name }}</td>
-        <td>{{ company.description }}</td>
-        <td>
-          <button type="submit" @click="showUpdateForm(company.id)">
-            Edytuj firmę
-          </button>
-        </td>
-        <td>
-          <button type="submit" @click="deleteCompany(company.id)">
-            Usuń firmę
-          </button>
-        </td>
-      </tr>
-    </table>
-    <create :show="showDialog" @hide="showCreateForm()" />
-    <update :id="id" :show="showUpdateDialog" @hide="hideUpdateForm()" />
+    <create />
+    <v-btn
+      depressed
+      color="error"
+      class="mt-2"
+      @click="deleteCompanies(ids)"
+      :disabled="invalid"
+    >
+      Usuń użytkowników
+    </v-btn>
+    <v-simple-table>
+      <thead>
+        <tr>
+          <th class="text-left">Id</th>
+          <th class="text-left">Imię</th>
+          <th class="text-left">Skrócona nazwa</th>
+          <th class="text-left">Opis</th>
+          <th class="text-left">Eydtuj</th>
+          <th class="text-left">Usuń</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="company in companies" :key="company.id">
+          <td>{{ company.id }}</td>
+          <td>{{ company.name }}</td>
+          <td>{{ company.compressed_name }}</td>
+          <td>{{ company.description }}</td>
+          <td class="text-left">
+            <update :company="company" />
+          </td>
+          <td class="text-left">
+            <v-checkbox
+              color="red"
+              value="red"
+              hide-details
+              :on-icon="'mdi-close-box'"
+              @click="addRemoveId(company.id)"
+            >
+            </v-checkbox>
+          </td>
+        </tr>
+      </tbody>
+    </v-simple-table>
   </div>
 </template>
 
@@ -52,6 +66,8 @@ export default {
       showDialog: false,
       showUpdateDialog: false,
       id: 0,
+      invalid:true,
+      ids:[]
     };
   },
   methods: {
@@ -85,6 +101,28 @@ export default {
     },
     hideUpdateForm() {
       this.showUpdateDialog = false;
+    },
+    deleteCompanies(ids) {
+      store.commit("setCompaniesIds", ids);
+      store.dispatch("deleteCompanies", this);
+      store.dispatch("getCompanies", this);
+      this.makeDis();
+    },
+    makeDis() {
+      if (this.ids.length > 0) {
+        this.invalid = false;
+      } else {
+        this.invalid = true;
+      }
+    },
+    addRemoveId(id) {
+      if (!this.ids.includes(id)) {
+        this.ids.push(id);
+      } else {
+        const ind = this.ids.indexOf(id);
+        this.ids.splice(ind, 1);
+      }
+      this.makeDis();
     },
   },
   created() {

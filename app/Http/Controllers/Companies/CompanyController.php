@@ -8,7 +8,6 @@ use App\Services\Companies\CompanyService;
 
 class CompanyController extends Controller
 {
-    
     protected CompanyService $companyService;
 
     public function __construct(CompanyService $companyService)
@@ -30,10 +29,10 @@ class CompanyController extends Controller
     }
 
 
-    public function update(CreateUpdateCompany $request,$id)
+    public function update(CreateUpdateCompany $request, $id)
     {
         $newCompany=$request->get('company');
-        $this->companyService->updateCompany($newCompany,$id);
+        $this->companyService->updateCompany($newCompany, $id);
     }
 
 
@@ -41,5 +40,4 @@ class CompanyController extends Controller
     {
         $this->companyService->deleteCompany($id);
     }
-
 }

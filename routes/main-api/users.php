@@ -8,6 +8,7 @@ use App\Http\Controllers\Users\UserController;
 
 
 Route::get('/list',[UsersController::class,'index']);
+Route::post('/delete',[UsersController::class,'destroyUsers']);
 
 
 Route::get('/show/{id}',[UserController::class,'show']);

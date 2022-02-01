@@ -2,6 +2,7 @@ const urlUser = "http://127.0.0.1:8000/main-api/users/";
 
 const state = {
     users: [],
+    usersIds: [],
     user: {
         id: 0,
         name: "",
@@ -20,6 +21,7 @@ const getters = {
     getUser: state => state.user,
     getUserId: state => state.user.id,
     getOk: state => state.ok,
+    getUsersIds: state => state.usersIds
 };
 
 const mutations = {
@@ -50,8 +52,11 @@ const mutations = {
     setUserPasswordConfirmation(state, data) {
         state.user.password_confirmation = data;
     },
-    setOk(state, data) {
-        state.ok = data;
+    setUserCompanyId(state,data){
+        state.user.company_id = data;
+    },
+    setUsersIds(state,data){
+        state.usersIds=data;
     }
 };
 
@@ -87,6 +92,7 @@ const actions = {
         state.commit("setUserEmail", "");
         state.commit("setUserPassword", "");
         state.commit("setUserPasswordConfirmation", "");
+        state.commit("setUserCompanyId", 0);
     },
     async updateUser(state, VueComponent) {
         const id = state.getters.getUserId;
@@ -111,6 +117,12 @@ const actions = {
                 console.log(error);
             })
     },
+    deleteUsers(state,VueComponent){
+        VueComponent.$http.post(urlUser+"delete",{ids:state.getters.getUsersIds})
+        .then(response=>{
+            console.log(response);
+        })
+    }
 };
 
 export default {

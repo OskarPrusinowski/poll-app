@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class CompaniesController extends Controller
 {
-
     protected CompaniesService $companiesService;
 
 
@@ -23,6 +22,9 @@ class CompaniesController extends Controller
         return response()->json(['companies'=>$companies]);
     }
 
-
-    
+    public function destroyCompanies(Request $request)
+    {
+        $ids=$request->get("ids");
+        $this->companiesService->deleteCompanies($ids);
+    }
 }

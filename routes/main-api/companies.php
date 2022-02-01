@@ -7,6 +7,8 @@ use App\Http\Controllers\Companies\CompanyController;
 
 
 Route::get('/list',[CompaniesController::class,'index']);
+Route::post('/delete',[CompaniesController::class,'destroyCompanies']);
+
 
 Route::get('/show/{id}',[CompanyController::class,'show']);
 Route::post('/create',[CompanyController::class,'create']);
