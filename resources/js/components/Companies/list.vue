@@ -1,44 +1,48 @@
 <template>
   <div class="content">
     <create />
-    <v-btn
-      depressed
-      color="error"
-      class="mt-2"
-      @click="deleteCompanies(ids)"
-      :disabled="invalid"
-    >
-      Usuń użytkowników
-    </v-btn>
+    
     <v-simple-table>
       <thead>
         <tr>
-          <th class="text-left">Id</th>
+          <th class="text-left">Lp</th>
           <th class="text-left">Imię</th>
           <th class="text-left">Skrócona nazwa</th>
           <th class="text-left">Opis</th>
+          <th class="text-left">Użytkownicy</th>
           <th class="text-left">Eydtuj</th>
           <th class="text-left">Usuń</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="company in companies" :key="company.id">
-          <td>{{ company.id }}</td>
+        <tr v-for="(company,index) in companies" :key="company.id">
+          <td>{{ index+1 }}</td>
           <td>{{ company.name }}</td>
           <td>{{ company.compressed_name }}</td>
           <td>{{ company.description }}</td>
-          <td class="text-left">
-            <update :company="company" />
+          <td>
+            <v-btn
+              depressed
+              color="error"
+              class="mt-2"
+              @click="goToCompanyUsers(company)"
+            >
+              Zobacz użytkowników
+            </v-btn>
           </td>
           <td class="text-left">
-            <v-checkbox
-              color="red"
-              value="red"
-              hide-details
-              :on-icon="'mdi-close-box'"
-              @click="addRemoveId(company.id)"
+            <change-name :company="company"/>
+          </td>
+          <td class="text-left">
+            <v-btn
+              color="error"
+              fab
+              small
+              dark
+              @click="deleteCompany(company)"
             >
-            </v-checkbox>
+              <v-icon>mdi-trash-can</v-icon>
+            </v-btn>
           </td>
         </tr>
       </tbody>
@@ -49,12 +53,13 @@
 <script>
 import store from "../../store/index";
 import create from "./create.vue";
-import update from "./update.vue";
+
+import changeName from "./changeName.vue"
 
 export default {
   components: {
     create: create,
-    update: update,
+    changeName:changeName
   },
   computed: {
     companies() {
@@ -63,44 +68,20 @@ export default {
   },
   data() {
     return {
-      showDialog: false,
-      showUpdateDialog: false,
       id: 0,
-      invalid:true,
-      ids:[]
+      invalid: true,
+      ids: [],
+      i:1
     };
   },
   methods: {
     getCompanies() {
       store.dispatch("getCompanies", this);
     },
-    deleteCompany(id) {
-      store.commit("setCompanyId", id);
+    deleteCompany(company) {
+      store.commit("setCompany", company);
       store.dispatch("deleteCompany", this);
       store.dispatch("getCompanies", this);
-    },
-    showCreateForm() {
-      if (this.showUpdateDialog) {
-        this.showUpdateDialog = false;
-      }
-      if (this.showDialog) {
-        this.showDialog = false;
-      } else {
-        this.showDialog = true;
-        store.dispatch("fetchCompanyInit");
-      }
-    },
-    showUpdateForm(id) {
-      this.showUpdateDialog = true;
-
-      if (this.showDialog) {
-        this.showDialog = false;
-      }
-      store.commit("setCompanyId", id);
-      store.dispatch("getCompany", this);
-    },
-    hideUpdateForm() {
-      this.showUpdateDialog = false;
     },
     deleteCompanies(ids) {
       store.commit("setCompaniesIds", ids);
@@ -124,6 +105,11 @@ export default {
       }
       this.makeDis();
     },
+    goToCompanyUsers(company){
+        store.commit("setCompany",company);
+        store.dispatch("getCompany",this);
+        this.$router.push(""+company.id);
+    }
   },
   created() {
     this.getCompanies();

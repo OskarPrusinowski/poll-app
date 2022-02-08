@@ -28,9 +28,9 @@
           </v-col>
           <v-col class="ma-0 pb-0 pt-0" md="10">
             <v-text-field
-              label="Login"
+              label="Numer telefonu"
               outlined
-              v-model="user.login"
+              v-model="user.phone_number"
               :rules="[rules.required, rules.min, rules.max]"
             ></v-text-field>
           </v-col>
@@ -60,7 +60,7 @@
               :type="show2 ? 'text' : 'password'"
               v-model="user.password_confirmation"
               :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[rules.required, rules.min, rules.max]"
+              :rules="[rules.required, rules.min, rules.max,rules.confirmPassword]"
               @click:append="show2 = !show2"
             ></v-text-field>
           </v-col>
@@ -109,6 +109,7 @@ export default {
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Nieprawidłowy email";
         },
+        confirmPassword: (value)=> this.user.password === value || "Hasła się nie zgadzają",
       },
     };
   },
@@ -127,9 +128,6 @@ export default {
     getCompanies() {
       store.dispatch("getCompanies", this);
     },
-    setUser() {
-      store.commit("setUser", this.user);
-    },
     submit(){
         if(this.$refs.form.validate()){
             this.updateUser(this.user)
@@ -138,7 +136,6 @@ export default {
   },
   created() {
     store.dispatch("fetchUserInit");
-    console.log(this.user.company_id);
   },
 };
 </script>

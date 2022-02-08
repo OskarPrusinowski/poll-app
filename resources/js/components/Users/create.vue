@@ -10,6 +10,12 @@
         <v-card>
           <v-card-title> Utwórz użytkownika </v-card-title>
           <v-divider></v-divider>
+          
+          <v-snackbar v-model="snackbar" :timeout="3000" top color="error">
+              <span>{{valError}}</span>
+              <v-divider></v-divider>
+          </v-snackbar>
+          <v-divider></v-divider>
           <v-col class="ma-0 pb-0 pt-0" md="10">
             <v-text-field
               label="Imie"
@@ -28,9 +34,9 @@
           </v-col>
           <v-col class="ma-0 pb-0 pt-0" md="10">
             <v-text-field
-              label="Login"
+              label="Numer telefonu"
               outlined
-              v-model="user.login"
+              v-model="user.phone_number"
               :rules="[rules.required, rules.min, rules.max]"
             ></v-text-field>
           </v-col>
@@ -42,45 +48,13 @@
               :rules="[rules.required, rules.email]"
             ></v-text-field>
           </v-col>
-          <v-col class="ma-0 pb-0 pt-0" md="10">
-            <v-text-field
-              label="Hasło"
-              outlined
-              :type="show1 ? 'text' : 'password'"
-              v-model="user.password"
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[rules.required, rules.min, rules.max]"
-              @click:append="show1 = !show1"
-            ></v-text-field>
-          </v-col>
-          <v-col class="ma-0 pb-0 pt-0" md="10">
-            <v-text-field
-              label="Potwierdź hasło"
-              outlined
-              :type="show2 ? 'text' : 'password'"
-              v-model="user.password_confirmation"
-              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[rules.required, rules.min, rules.max,rules.confirmPassword]"
-              @click:append="show2 = !show2"
-            ></v-text-field>
-          </v-col>
-          <v-col class="ma-0 pb-0 pt-0" md="10">
-            <v-select
-              v-if="companies"
-              v-model="user.company_id"
-              :items="companies"
-              item-text="name"
-              item-value="id"
-              filled
-              label="Firma"
-            ></v-select>
-          </v-col>
+
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn depressed color="error" type="submit" @click="dialog = false"
               >Anuluj</v-btn
             >
-            <v-btn depressed color="primary" @click="submit()"
+            <v-btn depressed color="primary" @click="submit()" :loading="loading"
               >Dodaj użytkownika</v-btn
             >
           </v-card-actions>
@@ -92,13 +66,21 @@
 
 <script>
 import store from "../../store/index";
+import alert from "./alert";
+
 export default {
-  props: ["show"],
+  components: {
+    alert: alert,
+  },
+  props: ["company_id"],
   data() {
     return {
       dialog: false,
-      show1: false,
-      show2: false,
+      e: false,
+      isE: false,
+      alert:false,
+      valError:"",
+      loading:false,
       rules: {
         required: (value) => !!value || "Wymagane.",
         max: (value) => value.length <= 20 || "Musi zawierać do 20 liter",
@@ -108,7 +90,8 @@ export default {
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Nieprawidłowy email";
         },
-        confirmPassword: (value)=> this.user.password === value || "Hasła się nie zgadzają",
+        confirmPassword: (value) =>
+          this.user.password === value || "Hasła się nie zgadzają",
       },
     };
   },
@@ -123,24 +106,35 @@ export default {
   methods: {
     async createUser(user) {
       store.commit("setUser", user);
-      store.dispatch("createUser", this);
-      this.dialog=false;
-      store.dispatch("getUsers", this);
+      store.commit("setUserCompanyId", this.company_id);
+      await store.dispatch("createUser", this).catch((error) => {
+        this.isE = true;
+      });
+        this.loading=false;
+      if (this.isE) {
+        this.snackbar=true;
+        this.valError="The email was taken";
+} else {
+        this.dialog = false;
+        store.dispatch("getUsers", this);
+        this.$emit("added");
+      }
     },
     getCompanies() {
       store.dispatch("getCompanies", this);
     },
     submit() {
       if (this.$refs.form.validate()) {
+          this.loading=true;
         this.createUser(this.user);
       }
     },
   },
   watch: {
     dialog() {
-        this.$refs.form.reset()
-    }
-},
+      this.$refs.form.reset();
+    },
+  },
   created() {
     store.dispatch("fetchUserInit");
     this.getCompanies();

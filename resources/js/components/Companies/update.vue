@@ -86,7 +86,7 @@ export default {
     },
   },
   created() {
-    store.dispatch("fetchCompanyInit");
+    store.dispatch("fetchCompanyInit",this);
   },
   watch: {
     dialog() {

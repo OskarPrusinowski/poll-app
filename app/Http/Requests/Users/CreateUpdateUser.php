@@ -26,9 +26,7 @@ class CreateUpdateUser extends FormRequest
         return [
             'user.name'=>'required|string|min:3|max:20',
             'user.surname'=>'required|string|min:3|max:30',
-            'user.login'=>'required|string|min:3|max:20',
             'user.email'=>'required|email',
-            'user.password'=>'required|confirmed|min:3|max:20',
             'user.company_id'=>'integer|nullable'
         ];
     }

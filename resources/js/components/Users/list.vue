@@ -1,24 +1,17 @@
 <template>
   <v-app>
     <div class="content">
-      <create />
-      <v-btn
-        depressed
-        color="error"
-        class="mt-2"
-        @click="deleteUsers(ids)"
-        :disabled="invalid"
-      >
-        Usuń użytkowników
-      </v-btn>
+      <create :company_id="null"/>
       <v-simple-table>
         <thead>
           <tr>
             <th class="text-left">Id</th>
             <th class="text-left">Imię</th>
             <th class="text-left">Nazwisko</th>
-            <th class="text-left">Login</th>
+            <th class="text-left">Numer telefonu</th>
             <th class="text-left">Email</th>
+            <th class="text-left">Data utworzenia</th>
+            <th class="text-left">Data ostatniego logowania</th>
             <th class="text-left">Firma</th>
             <th class="text-left">Eydtuj</th>
             <th class="text-left">Usuń</th>
@@ -29,8 +22,11 @@
             <td class="text-left">{{ user.id }}</td>
             <td class="text-left">{{ user.name }}</td>
             <td class="text-left">{{ user.surname }}</td>
-            <td class="text-left">{{ user.login }}</td>
+            <td class="text-left">{{ user.phone_number }}</td>
             <td class="text-left">{{ user.email }}</td>
+            <td class="text-left">{{ moment(user.created_at).format('MMMM Do YYYY, h:mm:ss a') }}</td>
+            <td class="text-left" v-if="user.last_login">{{ moment(user.last_login).format('MMMM Do YYYY, h:mm:ss a') }}</td>
+            <td v-else></td>
             <td class="text-left" v-if="user.company">
               {{ user.company.name }}
             </td>
@@ -39,14 +35,15 @@
               <update :user="user" />
             </td>
             <td class="text-left">
-              <v-checkbox
-                color="red"
-                value="red"
-                hide-details
-                :on-icon="'mdi-close-box'"
-                @click="addRemoveId(user.id)"
-              >
-              </v-checkbox>
+              <v-btn
+              color="error"
+              fab
+              small
+              dark
+              @click="deleteUser(user)"
+            >
+              <v-icon>mdi-trash-can</v-icon>
+            </v-btn>
             </td>
           </tr>
         </tbody>
@@ -60,6 +57,8 @@ import store from "../../store/index";
 import create from "./create.vue";
 import update from "./update.vue";
 
+import moment from "moment"
+
 export default {
   components: {
     create: create,
@@ -72,6 +71,7 @@ export default {
       id: 0,
       ids: [],
       invalid: true,
+      moment:moment
     };
   },
   computed: {
@@ -83,8 +83,8 @@ export default {
     getUsers() {
       store.dispatch("getUsers", this);
     },
-    deleteUser(id) {
-      store.commit("setUserId", id);
+    deleteUser(user) {
+      store.commit("setUser", user);
       store.dispatch("deleteUser", this);
       store.dispatch("getUsers", this);
     },
@@ -135,7 +135,6 @@ export default {
   },
   created() {
     this.getUsers();
-    this.getCompanies();
   },
 };
 </script>

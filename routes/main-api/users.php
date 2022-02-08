@@ -16,6 +16,3 @@ Route::post('/create',[UserController::class,'create']);
 Route::delete('/delete/{id}',[UserController::class,'destroy']);
 Route::put('/update/{id}',[UserController::class,'update']);
 
-
-
-

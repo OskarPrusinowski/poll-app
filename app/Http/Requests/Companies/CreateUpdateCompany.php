@@ -25,8 +25,6 @@ class CreateUpdateCompany extends FormRequest
     {
         return [
             'company.name'=>'required|string|min:3|max:20',
-            'company.compressed_name'=>'required|string|min:3|max:20',
-            'company.description'=>'required|string|min:3',
         ];
     }
 

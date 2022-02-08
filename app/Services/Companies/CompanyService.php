@@ -15,7 +15,7 @@ class CompanyService{
 
     public function getCompany($id)
     {
-        return $this->companyModel->find($id);
+        return $this->companyModel->with("users")->with("campaigns")->find($id);
     }
 
     public function createCompany($company)

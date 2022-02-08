@@ -7,7 +7,8 @@ const state = {
         id: 0,
         name: "",
         compressed_name: "",
-        description: ""
+        description: "",
+        users:[]
     },
 };
 
@@ -20,6 +21,7 @@ const getters = {
     getCompanyCompressedName: state => state.company.compressed_name,
     getCompanyDescription: state => state.company.description,
     getOk: state => state.ok,
+    getCompanyUsers: state =>state.company.users,
 };
 
 const mutations = {
@@ -43,6 +45,9 @@ const mutations = {
     },
     setCompaniesIds(state,data){
         state.companiesIds=data;
+    },
+    setCompanyUsers(state,data){
+        state.company.users=data;
     }
 };
 
@@ -51,18 +56,18 @@ const actions = {
         VueComponent.$http.get(urlCompany + "list")
             .then(response => {
                 state.commit("setCompanies", response.data.companies);
-                console.log(response.data.companies)
+                console.log(response)
+                console.log("W store")
+                console.log(state.getters.getCompanies)
             })
     },
     async createCompany(state, VueComponent) {
         VueComponent.$http.post(urlCompany + "create", { company: state.getters.getCompany })
             .then(response => {
                 console.log(response);
-                state.commit("setOk", true);
             })
             .catch(error => {
                 console.log(error);
-                state.commit("setOk", false);
             })
     },
     async deleteCompany(state, VueComponent) {
@@ -73,13 +78,15 @@ const actions = {
             })
     },
     async fetchCompanyInit(state) {
+        state.dispatch("setCompany",{})
         state.commit("setCompanyName", "");
         state.commit("setCompanyCompressedName", "");
         state.commit("setCompanyDescription", "");
     },
-    getCompany(state, VueComponent) {
-        const id = state.getters.getCompanyId;
-        VueComponent.$http.get(urlCompany + "show/" + id)
+    async getCompany(state, VueComponent) {
+         //const id = state.getters.getCompanyId;
+         const id = state.getters.getCompanyId;
+         VueComponent.$http.get(urlCompany + "show/" + id)
             .then(response => {
                 state.commit("setCompany", response.data.company);
                 console.log(response);
@@ -90,11 +97,9 @@ const actions = {
         VueComponent.$http.put(urlCompany + "update/" + id, { company: state.getters.getCompany })
             .then(response => {
                 console.log(response);
-                state.commit("setOk", true);
             })
             .catch(error => {
                 console.log(error);
-                state.commit("setOk", false);
             })
     },
     deleteCompanies(state,VueComponent){

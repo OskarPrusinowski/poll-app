@@ -1,18 +1,29 @@
 import UserList from './components/Users/list'
+import CompanyShow from './components/Companies/show'
 
 import CompanyList from './components/Companies/list'
+
+import CampaignsList from './components/Campaigns/list'
 
 
 export default{
     mode:'history',
     routes:[
         {
-            path:'/user/list',
+            path:'/users/list',
             component:UserList
         },
         {
-            path:'/company/list',
+            path:'/companies/list',
             component:CompanyList
+        },
+        {
+            path:'/companies/:id',
+            component:CompanyShow,
+        },
+        {
+            path:'/campaigns/list',
+            component:CampaignsList,
         },
     ]
 }

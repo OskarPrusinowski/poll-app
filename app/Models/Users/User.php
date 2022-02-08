@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,8 +16,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'surname',
-        'login',
         'email',
+        'phone_number',
         'password',
         'company_id',
     ];
