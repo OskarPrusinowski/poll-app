@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Services\Users\UsersService;
 use Illuminate\Http\Request;
+use App\Http\Requests\Users\DestroyUsers;
 
 class UsersController extends Controller
 {
@@ -12,18 +13,24 @@ class UsersController extends Controller
 
     public function __construct(UsersService $usersService)
     {
-        $this->usersService=$usersService;
+        $this->usersService = $usersService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users=$this->usersService->getUsersList();
-        return response()->json(['users'=>$users]);
+        $users = $this->usersService->getUsersList($request->page, $request->total);
+        return response()->json(['users' => $users]);
     }
 
-    public function destroyUsers(Request $request)
+    public function destroyUsers(DestroyUsers $request)
     {
-        $ids=$request->get("ids");
+        $ids = $request->get("ids");
         $this->usersService->deleteUsers($ids);
+    }
+
+    public function getAmountUsers()
+    {
+        $count = $this->usersService->countUsers();
+        return response()->json(['count' => $count]);
     }
 }

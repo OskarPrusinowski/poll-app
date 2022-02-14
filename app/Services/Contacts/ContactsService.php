@@ -4,7 +4,7 @@ namespace App\Services\Contacts;
 
 use App\Models\Contacts\Contact;
 use Excel;
-use App\Imports\ContactImport;
+use App\Imports\ContactsImport;
 
 
 class ContactsService{
@@ -18,7 +18,7 @@ class ContactsService{
 
     public function importContacts($file,$id)
     {
-        Excel::import(new ContactImport($id),$file);
+        Excel::import(new ContactsImport($id),$file);
         return true;
     }
 

@@ -1,15 +1,20 @@
+import { Store } from "vuex";
+
 const urlCompany = "http://127.0.0.1:8000/main-api/companies/";
 
 const state = {
     companies: [],
-    companiesIds:[],
+    companiesIds: [],
     company: {
         id: 0,
         name: "",
         compressed_name: "",
         description: "",
-        users:[]
+        users: []
     },
+    companiesPage: 1,
+    companiesTotal: 5,
+    companiesCount: 0
 };
 
 const getters = {
@@ -21,7 +26,10 @@ const getters = {
     getCompanyCompressedName: state => state.company.compressed_name,
     getCompanyDescription: state => state.company.description,
     getOk: state => state.ok,
-    getCompanyUsers: state =>state.company.users,
+    getCompanyUsers: state => state.company.users,
+    getCompaniesPage: state => state.companiesPage,
+    getCompaniesTotal: state => state.companiesTotal,
+    getCompaniesCount: state => state.companiesCount
 };
 
 const mutations = {
@@ -43,22 +51,30 @@ const mutations = {
     setCompanyDescription(state, data) {
         state.company.description = data;
     },
-    setCompaniesIds(state,data){
-        state.companiesIds=data;
+    setCompaniesIds(state, data) {
+        state.companiesIds = data;
     },
-    setCompanyUsers(state,data){
-        state.company.users=data;
+    setCompanyUsers(state, data) {
+        state.company.users = data;
+    },
+    setCompaniesPage(state, data) {
+        state.companiesPage = data;
+    },
+    setCompaniesTotal(state, data) {
+        state.companiesTotal = data;
+    },
+    setCompaniesCount(state, data) {
+        state.companiesCount = data;
     }
 };
 
 const actions = {
     async getCompanies(state, VueComponent) {
-        VueComponent.$http.get(urlCompany + "list")
+        const page = state.getters.getCompaniesPage;
+        const total = state.getters.getCompaniesTotal;
+        VueComponent.$http.get(urlCompany + "list?page=" + page + "&total=" + total)
             .then(response => {
                 state.commit("setCompanies", response.data.companies);
-                console.log(response)
-                console.log("W store")
-                console.log(state.getters.getCompanies)
             })
     },
     async createCompany(state, VueComponent) {
@@ -78,15 +94,15 @@ const actions = {
             })
     },
     async fetchCompanyInit(state) {
-        state.dispatch("setCompany",{})
+        state.dispatch("setCompany", {})
         state.commit("setCompanyName", "");
         state.commit("setCompanyCompressedName", "");
         state.commit("setCompanyDescription", "");
     },
     async getCompany(state, VueComponent) {
-         //const id = state.getters.getCompanyId;
-         const id = state.getters.getCompanyId;
-         VueComponent.$http.get(urlCompany + "show/" + id)
+        //const id = state.getters.getCompanyId;
+        const id = state.getters.getCompanyId;
+        VueComponent.$http.get(urlCompany + "show/" + id)
             .then(response => {
                 state.commit("setCompany", response.data.company);
                 console.log(response);
@@ -102,11 +118,17 @@ const actions = {
                 console.log(error);
             })
     },
-    deleteCompanies(state,VueComponent){
-        VueComponent.$http.post(urlCompany+"delete",{ids:state.getters.getCompaniesIds})
-        .then(response=>{
-            console.log(response);
-        })
+    deleteCompanies(state, VueComponent) {
+        VueComponent.$http.post(urlCompany + "delete", { ids: state.getters.getCompaniesIds })
+            .then(response => {
+                console.log(response);
+            })
+    },
+    getCompaniesCount(state, VueComponent) {
+        VueComponent.$http.get(urlCompany + "count")
+            .then(response => {
+                state.commit("setCompaniesCount", response.data.count)
+            })
     }
 };
 

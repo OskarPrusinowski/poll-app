@@ -15,7 +15,10 @@ const state = {
         company_id: null
     },
     ok: true,
-    dialog:true
+    dialog: true,
+    usersPage: 1,
+    usersTotal: 5,
+    usersCount: 0
 };
 
 const getters = {
@@ -24,7 +27,10 @@ const getters = {
     getUserId: state => state.user.id,
     getUsersIds: state => state.usersIds,
     getDialog: state => state.dialog,
-    getUserCompanyId: state => state.user.company_id
+    getUserCompanyId: state => state.user.company_id,
+    getUsersPage: state => state.usersPage,
+    getUsersTotal: state => state.usersTotal,
+    getUsersCount: state => state.usersCount
 };
 
 const mutations = {
@@ -61,14 +67,25 @@ const mutations = {
     setUserPhoneNumber(state, data) {
         state.phone_number = data;
     },
-    setDialog(state,data){
-        state.dialog=data;
+    setDialog(state, data) {
+        state.dialog = data;
+    },
+    setUsersPage(state, data) {
+        state.usersPage = data;
+    },
+    setUsersTotal(state, data) {
+        state.usersTotal = data;
+    },
+    setUsersCount(state, data) {
+        state.usersCount = data;
     }
 };
 
 const actions = {
     async getUsers(state, VueComponent) {
-        VueComponent.$http.get(urlUser + "list")
+        const page = state.getters.getUsersPage;
+        const total = state.getters.getUsersTotal;
+        VueComponent.$http.get(urlUser + "list?page=" + page + "&total=" + total)
             .then(response => {
                 state.commit("setUsers", response.data.users);
             })
@@ -125,10 +142,22 @@ const actions = {
                 console.log(response);
             })
     },
-    async getActualUser(state,VueComponent){
+    async getActualUser(state, VueComponent) {
         await VueComponent.$http.get(urlAuthUser)
-            .then(response=>{
-                state.commit("setUser",response.body);
+            .then(response => {
+                state.commit("setUser", response.body);
+            })
+    },
+    logoutUser(state, VueComponent) {
+        VueComponent.$http.post(urlUser + "logout", { user: state.getters.getUser })
+            .then(response => {
+                console.log(response);
+            })
+    },
+    getUsersCount(state, VueComponent) {
+        VueComponent.$http.get(urlUser + "count")
+            .then(response => {
+                state.commit("setUsersCount", response.data.count)
             })
     }
 };

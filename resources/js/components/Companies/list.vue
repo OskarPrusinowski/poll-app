@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <create />
-    
+
     <v-simple-table>
       <thead>
         <tr>
@@ -15,8 +15,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(company,index) in companies" :key="company.id">
-          <td>{{ index+1 }}</td>
+        <tr v-for="(company, index) in companies" :key="company.id">
+          <td>{{ index + 1 }}</td>
           <td>{{ company.name }}</td>
           <td>{{ company.compressed_name }}</td>
           <td>{{ company.description }}</td>
@@ -31,22 +31,22 @@
             </v-btn>
           </td>
           <td class="text-left">
-            <change-name :company="company"/>
+            <change-name :company="company" />
           </td>
           <td class="text-left">
-            <v-btn
-              color="error"
-              fab
-              small
-              dark
-              @click="deleteCompany(company)"
-            >
+            <v-btn color="error" fab small dark @click="deleteCompany(company)">
               <v-icon>mdi-trash-can</v-icon>
             </v-btn>
           </td>
         </tr>
       </tbody>
     </v-simple-table>
+    <v-pagination
+      v-model="page"
+      :length="length"
+      :total-visible="7"
+      @input="setPage"
+    ></v-pagination>
   </div>
 </template>
 
@@ -54,16 +54,24 @@
 import store from "../../store/index";
 import create from "./create.vue";
 
-import changeName from "./changeName.vue"
+import changeName from "./changeName.vue";
 
 export default {
   components: {
     create: create,
-    changeName:changeName
+    changeName: changeName,
   },
   computed: {
     companies() {
       return store.getters.getCompanies;
+    },
+    page() {
+      return store.getters.getCompaniesPage;
+    },
+    length() {
+      return Math.ceil(
+        store.getters.getCompaniesCount / store.getters.getCompaniesTotal
+      );
     },
   },
   data() {
@@ -71,7 +79,7 @@ export default {
       id: 0,
       invalid: true,
       ids: [],
-      i:1
+      i: 1,
     };
   },
   methods: {
@@ -105,14 +113,22 @@ export default {
       }
       this.makeDis();
     },
-    goToCompanyUsers(company){
-        store.commit("setCompany",company);
-        store.dispatch("getCompany",this);
-        this.$router.push(""+company.id);
-    }
+    goToCompanyUsers(company) {
+      store.commit("setCompany", company);
+      store.dispatch("getCompany", this);
+      this.$router.push("" + company.id);
+    },
+    setPage(page) {
+      store.commit("setCompaniesPage", page);
+      this.getCompanies();
+    },
+    countCompanies() {
+      store.dispatch("getCompaniesCount", this);
+    },
   },
   created() {
     this.getCompanies();
+    this.countCompanies();
   },
 };
 </script>

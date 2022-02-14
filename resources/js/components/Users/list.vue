@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div class="content">
-      <create :company_id="null"/>
+      <create :company_id="null" />
       <v-simple-table>
         <thead>
           <tr>
@@ -24,8 +24,12 @@
             <td class="text-left">{{ user.surname }}</td>
             <td class="text-left">{{ user.phone_number }}</td>
             <td class="text-left">{{ user.email }}</td>
-            <td class="text-left">{{ moment(user.created_at).format('MMMM Do YYYY, h:mm:ss a') }}</td>
-            <td class="text-left" v-if="user.last_login">{{ moment(user.last_login).format('MMMM Do YYYY, h:mm:ss a') }}</td>
+            <td class="text-left">
+              {{ moment(user.created_at).format("MMMM Do YYYY, h:mm:ss a") }}
+            </td>
+            <td class="text-left" v-if="user.last_login">
+              {{ moment(user.last_login).format("MMMM Do YYYY, h:mm:ss a") }}
+            </td>
             <td v-else></td>
             <td class="text-left" v-if="user.company">
               {{ user.company.name }}
@@ -35,19 +39,19 @@
               <update :user="user" />
             </td>
             <td class="text-left">
-              <v-btn
-              color="error"
-              fab
-              small
-              dark
-              @click="deleteUser(user)"
-            >
-              <v-icon>mdi-trash-can</v-icon>
-            </v-btn>
+              <v-btn color="error" fab small dark @click="deleteUser(user)">
+                <v-icon>mdi-trash-can</v-icon>
+              </v-btn>
             </td>
           </tr>
         </tbody>
       </v-simple-table>
+      <v-pagination
+        v-model="page"
+        :length="length"
+        :total-visible="7"
+        @input="setPage"
+      ></v-pagination>
     </div>
   </v-app>
 </template>
@@ -57,7 +61,7 @@ import store from "../../store/index";
 import create from "./create.vue";
 import update from "./update.vue";
 
-import moment from "moment"
+import moment from "moment";
 
 export default {
   components: {
@@ -71,12 +75,18 @@ export default {
       id: 0,
       ids: [],
       invalid: true,
-      moment:moment
+      moment: moment,
     };
   },
   computed: {
     users() {
       return store.getters.getUsers;
+    },
+    page() {
+      return store.getters.getUsersPage;
+    },
+    length() {
+      return Math.ceil(store.getters.getUsersCount / store.getters.getUsersTotal);
     },
   },
   methods: {
@@ -132,9 +142,17 @@ export default {
       }
       this.makeDis();
     },
+    setPage(page) {
+      store.commit("setUsersPage", page);
+      this.getUsers();
+    },
+    countUsers() {
+      store.dispatch("getUsersCount", this);
+    },
   },
   created() {
     this.getUsers();
+    this.countUsers();
   },
 };
 </script>

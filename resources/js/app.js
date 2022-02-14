@@ -10,11 +10,23 @@ window.Vue = require('vue').default;
 Vue.use(VueRouter);
 Vue.use(VueResource);
 
+
+//nowe
+
+Vue.http.interceptors.push((request) => {
+    let token = document.head.querySelector('meta[name="csrf-token"]');
+
+    if (token) {
+        request.headers.set("X-CSRF-TOKEN", token.content);
+    }
+});
+
 const app = new Vue({
-    vuetify:Vuetify,
+    vuetify: Vuetify,
     el: '#app',
-    router:new VueRouter(routes),
-    components:{
+    router: new VueRouter(routes),
+    components: {
         mainVue
     }
 });
+

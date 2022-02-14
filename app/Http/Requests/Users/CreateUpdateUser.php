@@ -23,11 +23,19 @@ class CreateUpdateUser extends FormRequest
      */
     public function rules()
     {
+        $id=$this->route('id');
         return [
             'user.name'=>'required|string|min:3|max:20',
             'user.surname'=>'required|string|min:3|max:30',
-            'user.email'=>'required|email',
+            'user.email'=>'required|email|unique:users,email,'.$id.',id,deleted_at,NULL',
             'user.company_id'=>'integer|nullable'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'user.email.unique'=>"Błąd"
         ];
     }
 }

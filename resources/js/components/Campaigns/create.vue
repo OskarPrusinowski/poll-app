@@ -11,7 +11,7 @@
         <v-card>
           <v-card-title> Utwórz kampanię </v-card-title>
           <v-divider></v-divider>
-          
+
           <v-col class="ma-0 pb-0 pt-0" md="10">
             <v-text-field
               label="Nazwa"
@@ -54,7 +54,7 @@
 import store from "../../store/index";
 
 export default {
-    props:["company"],
+    props:["company_id"],
   data() {
     return {
       dialog: false,
@@ -77,13 +77,12 @@ export default {
   methods: {
     createCampaign(campaign) {
       campaign.date_registration = this.picker;
-      campaign.company_id=this.company.id;
+      campaign.company_id=this.company_id;
       store.commit("setCampaign", campaign);
       store.dispatch("createCampaign", this);
       this.loading=false;
       this.dialog = false;
-      store.commit("setCompanyId",this.company.id);
-      store.dispatch("getCompany",this);
+      this.$emit("added");
 },
     submit() {
       if (this.$refs.form.validate()) {

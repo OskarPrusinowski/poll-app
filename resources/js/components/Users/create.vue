@@ -10,11 +10,10 @@
         <v-card>
           <v-card-title> Utwórz użytkownika </v-card-title>
           <v-divider></v-divider>
-          
           <v-snackbar v-model="snackbar" :timeout="3000" top color="error">
               <span>{{valError}}</span>
               <v-divider></v-divider>
-          </v-snackbar>
+          </v-snackbar>F
           <v-divider></v-divider>
           <v-col class="ma-0 pb-0 pt-0" md="10">
             <v-text-field
@@ -81,6 +80,7 @@ export default {
       alert:false,
       valError:"",
       loading:false,
+      snackbar:false,
       rules: {
         required: (value) => !!value || "Wymagane.",
         max: (value) => value.length <= 20 || "Musi zawierać do 20 liter",
@@ -109,11 +109,11 @@ export default {
       store.commit("setUserCompanyId", this.company_id);
       await store.dispatch("createUser", this).catch((error) => {
         this.isE = true;
+        this.valError=error.body.errors['user.email'][0];
       });
         this.loading=false;
       if (this.isE) {
         this.snackbar=true;
-        this.valError="The email was taken";
 } else {
         this.dialog = false;
         store.dispatch("getUsers", this);
@@ -136,7 +136,7 @@ export default {
     },
   },
   created() {
-    store.dispatch("fetchUserInit");
+    store.dispatch("fetchUserInit",this);
     this.getCompanies();
   },
 };

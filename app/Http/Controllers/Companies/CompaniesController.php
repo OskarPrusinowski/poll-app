@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Companies;
 use App\Http\Controllers\Controller;
 use App\Services\Companies\CompaniesService;
 use Illuminate\Http\Request;
+use App\Http\Requests\Companies\DestroyCompanies;
 
 class CompaniesController extends Controller
 {
@@ -13,18 +14,24 @@ class CompaniesController extends Controller
 
     public function __construct(CompaniesService $companiesService)
     {
-        $this->companiesService=$companiesService;
+        $this->companiesService = $companiesService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $companies=$this->companiesService->getCompaniesList();
-        return response()->json(['companies'=>$companies]);
+        $companies = $this->companiesService->getCompaniesList($request->page, $request->total);
+        return response()->json(['companies' => $companies]);
     }
 
-    public function destroyCompanies(Request $request)
+    public function destroyCompanies(DestroyCompanies $request)
     {
-        $ids=$request->get("ids");
+        $ids = $request->get("ids");
         $this->companiesService->deleteCompanies($ids);
+    }
+
+    public function getAmountCompanies()
+    {
+        $count = $this->companiesService->countCompanies();
+        return response()->json(['count' => $count]);
     }
 }

@@ -35,9 +35,19 @@ class UserController extends Controller
         $this->userService->updateUser($newUser, $id);
     }
 
-
     public function destroy($id)
     {
         $this->userService->deleteUser($id);
+    }
+
+
+    //problem
+    public function logoutApi(Request $request)
+    {
+        dd($request->user());
+        $user = $this->userService->getUser($request->get('user')['id']);
+        dump($user->tokens);
+        dd($user->currentAccessToken());
+        $user->currentAccessToken()->delete();
     }
 }
