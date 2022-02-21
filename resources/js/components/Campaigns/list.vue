@@ -1,6 +1,6 @@
 <template>
   <div>
-    <create :company_id="company_id" @added="getCampaigns" />
+    <create :company_id="company_id" @added="changedAmountCampaigns" />
     <v-simple-table>
       <thead>
         <tr>
@@ -11,6 +11,7 @@
           <th class="text-left">Plik</th>
           <th class="text-left">Lista kontaktów</th>
           <th class="text-left">Data publikacji</th>
+          <th class="text-left">Anonimizuj kontakty</th>
           <th class="text-left">Usuń kampanię</th>
         </tr>
       </thead>
@@ -20,7 +21,29 @@
           <td>{{ campaign.name }}</td>
           <td>{{ campaign.comunication_type }}</td>
           <td>{{ campaign.date_registration }}</td>
-          <td v-if="campaign.file_name">{{ campaign.orginal_file_name }}</td>
+          <td v-if="campaign.file_name">
+            <v-btn
+              depressed
+              color="primary"
+              :href="
+                'http://127.0.0.1:8000/main-api/campaigns/getFile/' +
+                campaign.id
+              "
+              target="_blank"
+            >
+              {{ campaign.orginal_file_name }}
+            </v-btn>
+            <v-btn
+              color="error"
+              fab
+              small
+              dark
+              :disabled="campaign.date_published"
+              @click="deleteFile(campaign)"
+            >
+              <v-icon>mdi-trash-can</v-icon>
+            </v-btn>
+          </td>
           <td v-else>
             <add-file :campaign="campaign" @added="getCampaigns" />
           </td>
@@ -49,6 +72,20 @@
           </td>
           <td class="text-left">
             <v-btn
+              color="primary"
+              fab
+              small
+              dark
+              :disabled="
+                campaign.date_published != null || campaign.is_anonymizated == 1
+              "
+              @click="anonymizate(campaign)"
+            >
+              <v-icon>mdi-account</v-icon>
+            </v-btn>
+          </td>
+          <td class="text-left">
+            <v-btn
               color="error"
               fab
               small
@@ -62,12 +99,39 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <v-pagination
-      v-model="page"
-      :length="length"
-      :total-visible="7"
-      @input="setPage"
-    ></v-pagination>
+    <div v-if="length != 1">
+      <v-pagination
+        v-model="page"
+        :length="length"
+        :total-visible="7"
+        @input="setPage"
+      ></v-pagination>
+
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            dark
+            text
+            color="primary"
+            class="ml-2"
+            v-bind="attrs"
+            v-on="on"
+          >
+            {{ itemsPerPage }}
+            <v-icon>mdi-chevron-down</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(number, index) in itemsPerPageArray"
+            :key="index"
+            @click="updateItemsPerPage(number)"
+          >
+            <v-list-item-title>{{ number }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
   </div>
 </template>
 
@@ -77,13 +141,21 @@ import create from "./create.vue";
 import addFile from "./addFile.vue";
 import importContacts from "./importContacts.vue";
 import showContacts from "./showContacts.vue";
+import showFile from "./showFile.vue";
 
 export default {
+  data() {
+    return {
+      itemsPerPageArray: [5, 8, 10],
+      itemsPerPage: 5,
+    };
+  },
   components: {
     create: create,
     addFile: addFile,
     importContacts: importContacts,
     showContacts: showContacts,
+    showFile: showFile,
   },
   computed: {
     user() {
@@ -117,7 +189,7 @@ export default {
       this.getCampaigns();
     },
     async getCampaigns() {
-      store.commit("setCampaignsTotal", 7);
+      store.commit("setCampaignsTotal", this.itemsPerPage);
       await store.dispatch("getActualUser", this);
       store.commit("setCampaignsCompanyId", store.getters.getUserCompanyId);
       store.dispatch("getCampaigns", this);
@@ -129,9 +201,30 @@ export default {
     countCampaigns() {
       store.dispatch("getCampaignsCount", this);
     },
-    deleteCampaign(campaign) {
+    async deleteCampaign(campaign) {
       store.commit("setCampaign", campaign);
-      store.dispatch("deleteCampaign", this);
+      await store.dispatch("deleteCampaign", this);
+      this.changedAmountCampaigns();
+    },
+    async deleteFile(campaign) {
+      store.commit("setCampaign", campaign);
+      await store.dispatch("deleteCampaignFile", this);
+      this.getCampaigns();
+    },
+    async anonymizate(campaign) {
+      store.commit("setCampaign", campaign);
+      await store.dispatch("getCampaignContacts", this);
+      store.commit("setCampaignIsAnonymizated", 1);
+      await store.dispatch("anonymizate", this);
+      store.dispatch("updateCampaign", this);
+    },
+    changedAmountCampaigns() {
+      this.getCampaigns();
+      this.countCampaigns();
+    },
+    updateItemsPerPage(number) {
+      this.itemsPerPage = number;
+      store.commit("setCampaignsPage", 1);
       this.getCampaigns();
     },
   },

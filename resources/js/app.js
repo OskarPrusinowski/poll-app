@@ -11,7 +11,6 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 
 
-//nowe
 
 Vue.http.interceptors.push((request) => {
     let token = document.head.querySelector('meta[name="csrf-token"]');

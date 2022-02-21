@@ -12,5 +12,8 @@ Route::post('/create', [CampaignController::class, 'create']);
 Route::post('/add', [CampaignController::class, 'addFIle']);
 Route::post('/release', [CampaignController::class, 'release']);
 Route::post('/update/{id}', [CampaignController::class, 'update']);
+Route::get('/contacts/{id}', [CampaignController::class, 'getCampaignContacts']);
 Route::get('/show/{id}', [CampaignController::class, 'show']);
+Route::get('/getFile/{id}', [CampaignController::class, 'getFile']);
 Route::delete('/delete/{id}', [CampaignController::class, 'destroy']);
+Route::delete('/deleteFile/{id}', [CampaignController::class, 'destroyFile']);

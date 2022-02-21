@@ -7,8 +7,6 @@
         <tr>
           <th class="text-left">Lp</th>
           <th class="text-left">Imię</th>
-          <th class="text-left">Skrócona nazwa</th>
-          <th class="text-left">Opis</th>
           <th class="text-left">Użytkownicy</th>
           <th class="text-left">Eydtuj</th>
           <th class="text-left">Usuń</th>
@@ -18,8 +16,6 @@
         <tr v-for="(company, index) in companies" :key="company.id">
           <td>{{ index + 1 }}</td>
           <td>{{ company.name }}</td>
-          <td>{{ company.compressed_name }}</td>
-          <td>{{ company.description }}</td>
           <td>
             <v-btn
               depressed
@@ -41,12 +37,38 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <v-pagination
-      v-model="page"
-      :length="length"
-      :total-visible="7"
-      @input="setPage"
-    ></v-pagination>
+    <div v-if="length != 1">
+      <v-pagination
+        v-model="page"
+        :length="length"
+        :total-visible="7"
+        @input="setPage"
+      ></v-pagination>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            dark
+            text
+            color="primary"
+            class="ml-2"
+            v-bind="attrs"
+            v-on="on"
+          >
+            {{ itemsPerPage }}
+            <v-icon>mdi-chevron-down</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(number, index) in itemsPerPageArray"
+            :key="index"
+            @click="updateItemsPerPage(number)"
+          >
+            <v-list-item-title>{{ number }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
   </div>
 </template>
 
@@ -80,10 +102,13 @@ export default {
       invalid: true,
       ids: [],
       i: 1,
+      itemsPerPageArray: [5, 8, 10],
+      itemsPerPage: 5,
     };
   },
   methods: {
     getCompanies() {
+      store.commit("setCompaniesTotal", this.itemsPerPage);
       store.dispatch("getCompanies", this);
     },
     deleteCompany(company) {
@@ -124,6 +149,11 @@ export default {
     },
     countCompanies() {
       store.dispatch("getCompaniesCount", this);
+    },
+    updateItemsPerPage(number) {
+      this.itemsPerPage = number;
+      store.commit("setCompaniesPage", 1);
+      this.getCompanies();
     },
   },
   created() {

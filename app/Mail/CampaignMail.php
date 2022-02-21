@@ -11,16 +11,17 @@ class CampaignMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $campaign;
+    public $campaign, $contact;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($campaign)
+    public function __construct($campaign, $contact)
     {
-        $this->campaign=$campaign;
+        $this->campaign = $campaign;
+        $this->contact = $contact;
     }
 
     /**
@@ -30,6 +31,6 @@ class CampaignMail extends Mailable
      */
     public function build()
     {
-        return $this->subject("Tytuł maila")->view("emails.CampaignEmail")->attachFromStorageDisk("public",'\polls/'.$this->campaign['file_name']);
+        return $this->subject("Tytuł maila")->view("emails.CampaignEmail")->attachFromStorageDisk("public", '\polls/' . $this->campaign['file_name']);
     }
 }

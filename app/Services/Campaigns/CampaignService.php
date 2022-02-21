@@ -8,6 +8,7 @@ use App\Models\Campaigns\Campaign;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Twilio\Rest\Client;
 
 
@@ -62,7 +63,7 @@ class CampaignService
     {
         $contacts = $this->getCampaign($campaign['id'])->contacts;
         foreach ($contacts as $contact) {
-            Mail::to($contact->email)->send(new CampaignMail($campaign));
+            Mail::to($contact->email)->send(new CampaignMail($campaign, $contact));
         }
     }
 
@@ -86,5 +87,26 @@ class CampaignService
     {
         $this->campaignModel->destroy($id);
         return true;
+    }
+
+    public function getContacts($id)
+    {
+        $campaign = $this->getCampaign($id);
+        return $campaign->contacts;
+    }
+
+    public function getFile($id)
+    {
+        $campaign = $this->getCampaign($id);
+        return Storage::disk('public')->get('polls/' . $campaign->file_name);
+    }
+
+    public function deleteFile($id)
+    {
+        $campaign = $this->getCampaign($id);
+        Storage::disk('public')->delete("polls/" . $campaign->file_name);
+        $campaign->file_name = null;
+        $campaign->orginal_file_name = null;
+        $campaign->save();
     }
 }

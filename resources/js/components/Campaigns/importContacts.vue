@@ -29,8 +29,7 @@
                 <tbody>
                   <tr v-for="(contact, index) in contacts" :key="contact.id">
                     <td>{{ index + 1 }}</td>
-                    <td v-if="isMail">{{ contact.email }}</td>
-                    <td v-else>{{ contact.phone_number }}</td>
+                    <td>{{ contact.name }}</td>
                   </tr>
                 </tbody>
               </v-simple-table>
@@ -45,7 +44,9 @@
         ></v-file-input>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="submit(file)"> I accept </v-btn>
+          <v-btn color="primary" text @click="submit(file, campaign)">
+            I accept
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -65,7 +66,10 @@ export default {
   },
   computed: {
     contacts() {
-      return store.getters.getCampaignContacts;
+      if (store.getters.getCampaignContacts) {
+        return store.getters.getCampaignContacts;
+      }
+      return [];
     },
     isMail() {
       if (this.campaign.is_contact_list) {
@@ -75,9 +79,9 @@ export default {
     },
   },
   methods: {
-    submit(file) {
+    submit(file, campaign) {
       this.dialog = false;
-      store.commit("setCampaign", this.campaign);
+      store.commit("setCampaign", campaign);
       store.commit("setFile", file);
       store.dispatch("importContacts", this);
       store.commit("setIsContactList", 1);
@@ -86,7 +90,7 @@ export default {
     },
     async getCampaign() {
       store.commit("setCampaign", this.campaign);
-      await store.dispatch("getCompaign", this);
+      await store.dispatch("getCampaign", this);
       this.campaign = store.getters.getCampaign;
     },
   },

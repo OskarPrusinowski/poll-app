@@ -46,12 +46,38 @@
           </tr>
         </tbody>
       </v-simple-table>
-      <v-pagination
-        v-model="page"
-        :length="length"
-        :total-visible="7"
-        @input="setPage"
-      ></v-pagination>
+      <div v-if="length != 1">
+        <v-pagination
+          v-model="page"
+          :length="length"
+          :total-visible="7"
+          @input="setPage"
+        ></v-pagination>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              dark
+              text
+              color="primary"
+              class="ml-2"
+              v-bind="attrs"
+              v-on="on"
+            >
+              {{ itemsPerPage }}
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(number, index) in itemsPerPageArray"
+              :key="index"
+              @click="updateItemsPerPage(number)"
+            >
+              <v-list-item-title>{{ number }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
     </div>
   </v-app>
 </template>
@@ -76,6 +102,8 @@ export default {
       ids: [],
       invalid: true,
       moment: moment,
+      itemsPerPageArray: [5, 8, 10],
+      itemsPerPage: 5,
     };
   },
   computed: {
@@ -86,11 +114,14 @@ export default {
       return store.getters.getUsersPage;
     },
     length() {
-      return Math.ceil(store.getters.getUsersCount / store.getters.getUsersTotal);
+      return Math.ceil(
+        store.getters.getUsersCount / store.getters.getUsersTotal
+      );
     },
   },
   methods: {
     getUsers() {
+      store.commit("setUsersTotal", this.itemsPerPage);
       store.dispatch("getUsers", this);
     },
     deleteUser(user) {
@@ -148,6 +179,11 @@ export default {
     },
     countUsers() {
       store.dispatch("getUsersCount", this);
+    },
+    updateItemsPerPage(number) {
+      this.itemsPerPage = number;
+      store.commit("setUsersPage", 1);
+      this.getUsers();
     },
   },
   created() {

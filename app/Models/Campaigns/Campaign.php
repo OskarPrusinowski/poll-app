@@ -10,9 +10,9 @@ use App\Models\Contacts\Contact;
 
 class Campaign extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'comunication_type', 'file_name','company_id','date_registration','is_contact_list','file_name','orginal_file_name','date_published'];
+    protected $fillable = ['name', 'comunication_type', 'file_name', 'company_id', 'date_registration', 'is_contact_list', 'is_anonymizated', 'file_name', 'orginal_file_name', 'date_published'];
 
     public function company()
     {

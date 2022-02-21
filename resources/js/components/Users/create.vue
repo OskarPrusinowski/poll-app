@@ -11,9 +11,9 @@
           <v-card-title> Utwórz użytkownika </v-card-title>
           <v-divider></v-divider>
           <v-snackbar v-model="snackbar" :timeout="3000" top color="error">
-              <span>{{valError}}</span>
-              <v-divider></v-divider>
-          </v-snackbar>F
+            <span>{{ valError }}</span>
+            <v-divider></v-divider>
+          </v-snackbar>
           <v-divider></v-divider>
           <v-col class="ma-0 pb-0 pt-0" md="10">
             <v-text-field
@@ -36,7 +36,7 @@
               label="Numer telefonu"
               outlined
               v-model="user.phone_number"
-              :rules="[rules.required, rules.min, rules.max]"
+              :rules="[rules.required, rules.min, rules.max, rules.phoneNumber]"
             ></v-text-field>
           </v-col>
           <v-col md="10">
@@ -53,7 +53,11 @@
             <v-btn depressed color="error" type="submit" @click="dialog = false"
               >Anuluj</v-btn
             >
-            <v-btn depressed color="primary" @click="submit()" :loading="loading"
+            <v-btn
+              depressed
+              color="primary"
+              @click="submit()"
+              :loading="loading"
               >Dodaj użytkownika</v-btn
             >
           </v-card-actions>
@@ -77,14 +81,20 @@ export default {
       dialog: false,
       e: false,
       isE: false,
-      alert:false,
-      valError:"",
-      loading:false,
-      snackbar:false,
+      alert: false,
+      valError: "",
+      loading: false,
+      snackbar: false,
       rules: {
         required: (value) => !!value || "Wymagane.",
         max: (value) => value.length <= 20 || "Musi zawierać do 20 liter",
         min: (value) => 3 <= value.length || "Musi zawierać od 3 liter",
+        phoneNumber: (v) => {
+          if (!v.trim()) return true;
+          if (!isNaN(parseFloat(v)) && v >= 100000000 && v <= 999999999)
+            return true;
+          return "Number has to be phone number";
+        },
         email: (value) => {
           const pattern =
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -109,12 +119,12 @@ export default {
       store.commit("setUserCompanyId", this.company_id);
       await store.dispatch("createUser", this).catch((error) => {
         this.isE = true;
-        this.valError=error.body.errors['user.email'][0];
+        this.valError = error.body.errors["user.email"][0];
       });
-        this.loading=false;
+      this.loading = false;
       if (this.isE) {
-        this.snackbar=true;
-} else {
+        this.snackbar = true;
+      } else {
         this.dialog = false;
         store.dispatch("getUsers", this);
         this.$emit("added");
@@ -125,7 +135,7 @@ export default {
     },
     submit() {
       if (this.$refs.form.validate()) {
-          this.loading=true;
+        this.loading = true;
         this.createUser(this.user);
       }
     },
@@ -136,7 +146,7 @@ export default {
     },
   },
   created() {
-    store.dispatch("fetchUserInit",this);
+    store.dispatch("fetchUserInit", this);
     this.getCompanies();
   },
 };

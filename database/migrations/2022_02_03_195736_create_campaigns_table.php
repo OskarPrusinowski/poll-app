@@ -21,6 +21,7 @@ class CreateCampaignsTable extends Migration
             $table->string('file_name')->nullable();
             $table->string('orginal_file_name')->nullable();
             $table->boolean('is_contact_list')->default(false);
+            $table->boolean('is_anonymizated')->default(false);
             $table->date('date_published')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -12,6 +12,7 @@
 
         <v-divider></v-divider>
         <v-file-input
+          :rules="[rules.required]"
           accept=".pdf"
           label="File input"
           v-model="file"
@@ -34,6 +35,9 @@ export default {
     return {
       dialog: false,
       file: "",
+      rules: {
+        required: (value) => !!value || "Wymagane.",
+      },
     };
   },
   methods: {

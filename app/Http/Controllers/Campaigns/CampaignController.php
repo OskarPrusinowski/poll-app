@@ -50,4 +50,22 @@ class CampaignController extends Controller
         $campaign = $request->get("campaign");
         $this->campaignService->updateCampaign($campaign, $id);
     }
+
+    public function getCampaignContacts($id)
+    {
+        $contacts = $this->campaignService->getContacts($id);
+        return response()->json(['contacts' => $contacts]);
+    }
+
+    public function getFile($id)
+    {
+        $file = $this->campaignService->getFile($id);
+        return response($file, 200)
+            ->header('Content-Type', 'application/pdf');
+    }
+
+    public function destroyFile($id)
+    {
+        $this->campaignService->deleteFile($id);
+    }
 }

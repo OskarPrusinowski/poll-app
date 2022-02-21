@@ -1,16 +1,7 @@
 <template>
   <v-app>
     <div class="content">
-      <create :company_id="$route.params.id" v-on:added="getCompany()"/>
-      <v-btn
-        depressed
-        color="error"
-        class="mt-2"
-        @click="deleteUsers(ids)"
-        :disabled="invalid"
-      >
-        Usuń użytkowników
-      </v-btn>
+      <create :company_id="$route.params.id" v-on:added="getCompany()" />
       <v-simple-table>
         <thead>
           <tr>
@@ -33,14 +24,9 @@
               <update :user="user" />
             </td>
             <td class="text-left">
-              <v-checkbox
-                color="red"
-                value="red"
-                hide-details
-                :on-icon="'mdi-close-box'"
-                @click="addRemoveId(user.id)"
-              >
-              </v-checkbox>
+              <v-btn color="error" fab small dark @click="deleteUser(user)">
+                <v-icon>mdi-trash-can</v-icon>
+              </v-btn>
             </td>
           </tr>
         </tbody>
@@ -75,7 +61,7 @@ export default {
   },
   methods: {
     getCompany() {
-      const id =this.$route.params.id;
+      const id = this.$route.params.id;
       store.commit("setCompanyId", id);
       store.dispatch("getCompany", this);
     },

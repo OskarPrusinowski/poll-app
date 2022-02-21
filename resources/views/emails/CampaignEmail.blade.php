@@ -10,5 +10,13 @@
     <h1>{{$campaign['name']}}</h1>
     <p>{{$campaign['file_name']}}</p>
     <p>Thank you</p>
+    <h1>{{$contact}}</h1>
+
+    <form action="{{route('contact.read',['id'=>$contact['id']])}}" method="POST" target="_blank">
+    @csrf
+        <button type="submit">Przeczytałem</button>
+
+</form>
 </body>
+
 </html>

@@ -12,14 +12,16 @@ const state = {
         company_id: 0,
         is_contact_list: false,
         date_published: null,
-        contacts: []
+        contacts: [],
+        is_anonymizated: false
     },
     campaigns: "",
     file: "",
     company_id: 0,
     camapignsPage: 1,
     campaignsTotal: 5,
-    campaignsCount: 0
+    campaignsCount: 0,
+    contacts: []
 };
 const getters = {
     getCampaign: state => state.campaign,
@@ -30,11 +32,15 @@ const getters = {
     getCampaigns: state => state.campaigns,
     getCampaignsPage: state => state.camapignsPage,
     getCampaignsTotal: state => state.campaignsTotal,
-    getCampaignsCount: state => state.campaignsCount
+    getCampaignsCount: state => state.campaignsCount,
+    getContacts: state => state.contacts,
 };
 const mutations = {
     setCampaign(state, data) {
         state.campaign = data;
+    },
+    setCampaignName(state, data) {
+        state.campaign.name = data;
     },
     setCampaignId(state, data) {
         state.campaign.id = data;
@@ -59,6 +65,30 @@ const mutations = {
     },
     setCampaignsCount(state, data) {
         state.campaignsCount = data;
+    },
+    setCampaignComunicationType(state, data) {
+        state.campaign.comunication_type = data;
+    },
+    setCampaignDateRegistration(state, data) {
+        state.campaign.date_registration = data;
+    },
+    setCampaignFileName(state, data) {
+        state.campaign.file_name = data;
+    },
+    setCampaignIsContactList(state, data) {
+        state.campaign.is_contact_list = data;
+    },
+    setCampaignDatePublished(state, data) {
+        state.campaign.date_published = data;
+    },
+    setCampaignContacts(state, data) {
+        state.campaign.contacts = data;
+    },
+    setCampaignIsAnonymizated(state, data) {
+        state.campaign.is_anonymizated = data;
+    },
+    setContacts(state, data) {
+        state.contacts = data;
     }
 };
 const actions = {
@@ -99,7 +129,7 @@ const actions = {
                 console.log(response);
             })
     },
-    getCompaign(state, VueComponent) {
+    getCampaign(state, VueComponent) {
         const id = state.getters.getCampaignId;
         VueComponent.$http.get(urlCampaign + "show/" + id)
             .then(response => {
@@ -129,8 +159,40 @@ const actions = {
             .then(resposne => {
                 console.log(resposne);
             })
+    },
+    deleteCampaignFile(state, VueComponent) {
+        const id = state.getters.getCampaignId;
+        VueComponent.$http.delete(urlCampaign + "deleteFile/" + id)
+            .then(resposne => {
+                console.log(resposne);
+            })
+    }
+    ,
+    fetchCampaignInit(state) {
+        state.commit("setCampaignName", "");
+        state.commit("setCampaignComunicationType", "");
+        state.commit("setCampaignDateRegistration", null);
+        state.commit("setCampaignFileName", "");
+        state.commit("setCampaignIsContactList", false);
+        state.commit("setCampaignDatePublished", null);
+        state.commit("setCampaignContacts", []);
+        state.commit("setCampaignIsAnonymizated", false);
+    },
+    anonymizate(state, VueComponent) {
+        VueComponent.$http.post(urlContatcs + "anonymizate", { contacts: state.getters.getContacts })
+            .then(response => {
+                console.log(response);
+            })
+    },
+    async getCampaignContacts(state, VueComponent) {
+        const id = state.getters.getCampaignId;
+        await VueComponent.$http.get(urlCampaign + "contacts/" + id)
+            .then(response => {
+                state.commit("setContacts", response.data.contacts);
+            })
     }
 };
+
 
 
 export default {

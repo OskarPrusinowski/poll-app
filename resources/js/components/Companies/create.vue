@@ -3,7 +3,13 @@
     <div class="text-center">
       <v-dialog v-model="dialog" max-width="500">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="blue lighten-8" dark v-bind="attrs" v-on="on">
+          <v-btn
+            color="blue lighten-8"
+            dark
+            v-bind="attrs"
+            v-on="on"
+            @click="resetValues"
+          >
             Stwórz firmę
           </v-btn>
         </template>
@@ -24,7 +30,11 @@
             <v-btn depressed color="error" type="submit" @click="dialog = false"
               >Anuluj</v-btn
             >
-            <v-btn depressed color="primary" @click="submit(name)" :loading="loading"
+            <v-btn
+              depressed
+              color="primary"
+              @click="submit(name)"
+              :loading="loading"
               >Dodaj firmę</v-btn
             >
           </v-card-actions>
@@ -40,7 +50,7 @@ export default {
   data() {
     return {
       dialog: false,
-      loading:false,
+      loading: false,
       rules: {
         required: (value) => !!value || "Wymagane.",
         max: (value) => value.length <= 20 || "Musi zawierać do 20 liter",
@@ -51,7 +61,7 @@ export default {
           return pattern.test(value) || "Nieprawidłowy email";
         },
       },
-      name:""
+      name: "",
     };
   },
   computed: {
@@ -62,9 +72,9 @@ export default {
   methods: {
     createCompany(name) {
       store.commit("setCompany", {});
-      store.commit("setCompanyName",name);
+      store.commit("setCompanyName", name);
       store.dispatch("createCompany", this);
-      this.loading=false;
+      this.loading = false;
       this.dialog = false;
       store.dispatch("getCompanies", this);
     },
@@ -73,14 +83,18 @@ export default {
     },
     submit(name) {
       if (this.$refs.form.validate()) {
-        this.loading=true;
+        this.loading = true;
         this.createCompany(name);
       }
     },
+    resetValues() {
+      store.dispatch("fetchCompanyInit");
+      this.name = "";
+    },
   },
   mounted() {
-      store.commit("setCompany",{});
-      store.dispatch("fetchCompanyInit",this);
-  }
+    store.commit("setCompany", {});
+    store.dispatch("fetchCompanyInit");
+  },
 };
 </script>

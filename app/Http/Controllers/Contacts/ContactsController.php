@@ -13,13 +13,19 @@ class ContactsController extends Controller
 
     public function __construct(ContactsService $contactsService)
     {
-        $this->contactsService=$contactsService;
+        $this->contactsService = $contactsService;
     }
 
     public function importContacts(ImportContacts $request)
     {
-        $campaignId=$request->id;
+        $campaignId = $request->id;
         $this->contactsService->deleteContacts($campaignId);
-        $this->contactsService->importContacts($request->file,$campaignId);
+        $this->contactsService->importContacts($request->file, $campaignId);
+    }
+
+    public function anonymizate(Request $request)
+    {
+        $contacts = $request->contacts;
+        $this->contactsService->anonymizate($contacts);
     }
 }

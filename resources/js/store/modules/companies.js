@@ -94,7 +94,7 @@ const actions = {
             })
     },
     async fetchCompanyInit(state) {
-        state.dispatch("setCompany", {})
+        state.commit("setCompany", {})
         state.commit("setCompanyName", "");
         state.commit("setCompanyCompressedName", "");
         state.commit("setCompanyDescription", "");

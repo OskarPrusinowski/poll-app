@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable=['email','phone_number','campaign_id'];
+    protected $fillable = ['name', 'email', 'phone_number', 'is_readed', 'campaign_id'];
 
     public function campaign()
     {

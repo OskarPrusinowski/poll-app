@@ -7,23 +7,32 @@ use Excel;
 use App\Imports\ContactsImport;
 
 
-class ContactsService{
+class ContactsService
+{
 
     public Contact $contactModel;
 
     public function __construct(Contact $contactModel)
     {
-        $this->contactModel=$contactModel;
+        $this->contactModel = $contactModel;
     }
 
-    public function importContacts($file,$id)
+    public function importContacts($file, $id)
     {
-        Excel::import(new ContactsImport($id),$file);
+        Excel::import(new ContactsImport($id), $file);
         return true;
     }
 
     public function deleteContacts($id)
     {
-        $this->contactModel->where('campaign_id',$id)->delete();
+        $this->contactModel->where('campaign_id', $id)->delete();
+    }
+
+
+    public function anonymizate($contacts)
+    {
+        foreach ($contacts as $contact) {
+            $this->contactModel->where("id", $contact['id'])->update(['name' => "XXXXXXXXXXX"]);
+        }
     }
 }

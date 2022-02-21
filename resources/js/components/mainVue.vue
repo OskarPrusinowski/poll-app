@@ -45,6 +45,7 @@ export default {
       isDisabledUser: false,
       isDisabledCompany: false,
       isDisabledCampaign: false,
+
     };
   },
   methods: {
