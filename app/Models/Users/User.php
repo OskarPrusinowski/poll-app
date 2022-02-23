@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Companies\Company;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -20,6 +21,7 @@ class User extends Authenticatable
         'phone_number',
         'password',
         'company_id',
+        'role_id',
     ];
 
     protected $hidden = [
@@ -36,5 +38,8 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
-
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }

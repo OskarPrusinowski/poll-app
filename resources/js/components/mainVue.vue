@@ -29,6 +29,9 @@
               Kampanie
             </v-btn></router-link
           >
+          <router-link to="/">
+            <v-btn depressed> Ustawienia </v-btn></router-link
+          >
         </div>
       </div></v-card
     >
@@ -45,7 +48,6 @@ export default {
       isDisabledUser: false,
       isDisabledCompany: false,
       isDisabledCampaign: false,
-
     };
   },
   methods: {

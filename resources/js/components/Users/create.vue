@@ -3,7 +3,13 @@
     <div class="text-center">
       <v-dialog v-model="dialog" max-width="500">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="blue lighten-8" dark v-bind="attrs" v-on="on">
+          <v-btn
+            color="blue lighten-8"
+            dark
+            v-bind="attrs"
+            v-on="on"
+            @click="open()"
+          >
             Stwórz użytkownika
           </v-btn>
         </template>
@@ -36,7 +42,7 @@
               label="Numer telefonu"
               outlined
               v-model="user.phone_number"
-              :rules="[rules.required, rules.min, rules.max, rules.phoneNumber]"
+              :rules="[rules.required]"
             ></v-text-field>
           </v-col>
           <v-col md="10">
@@ -47,7 +53,17 @@
               :rules="[rules.required, rules.email]"
             ></v-text-field>
           </v-col>
-
+          <v-col class="ma-0 pb-0 pt-0" md="10">
+            <v-text-field
+              label="Hasło"
+              outlined
+              :type="show1 ? 'text' : 'password'"
+              v-model="user.password"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules.required, rules.min, rules.max]"
+              @click:append="show1 = !show1"
+            ></v-text-field>
+          </v-col>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn depressed color="error" type="submit" @click="dialog = false"
@@ -85,10 +101,11 @@ export default {
       valError: "",
       loading: false,
       snackbar: false,
+      show1: false,
       rules: {
         required: (value) => !!value || "Wymagane.",
         max: (value) => value.length <= 20 || "Musi zawierać do 20 liter",
-        min: (value) => 3 <= value.length || "Musi zawierać od 3 liter",
+        min: (value) => 8 <= value.length || "Musi zawierać od 8 liter",
         phoneNumber: (v) => {
           if (!v.trim()) return true;
           if (!isNaN(parseFloat(v)) && v >= 100000000 && v <= 999999999)
@@ -138,6 +155,10 @@ export default {
         this.loading = true;
         this.createUser(this.user);
       }
+    },
+    open() {
+      this.loading = false;
+      store.dispatch("fetchUserInit");
     },
   },
   watch: {

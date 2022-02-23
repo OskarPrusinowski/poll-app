@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Users\UsersService;
 use Illuminate\Http\Request;
 use App\Http\Requests\Users\DestroyUsers;
+use Illuminate\Support\Facades\Gate;
 
 class UsersController extends Controller
 {
@@ -14,6 +15,7 @@ class UsersController extends Controller
     public function __construct(UsersService $usersService)
     {
         $this->usersService = $usersService;
+        $this->middleware("permission:oskar");
     }
 
     public function index(Request $request)

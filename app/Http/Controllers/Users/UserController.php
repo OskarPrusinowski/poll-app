@@ -13,41 +13,30 @@ class UserController extends Controller
 
     public function __construct(UserService $userService)
     {
-        $this->userService=$userService;
+        $this->userService = $userService;
     }
 
 
     public function create(CreateUpdateUser $request)
     {
-        $newUser=$request->get('user');
+        $newUser = $request->get('user');
         $this->userService->createUser($newUser);
     }
 
     public function show($id)
     {
-        $user=$this->userService->getUser($id);
-        return response()->json(['user'=>$user]);
+        $user = $this->userService->getUser($id);
+        return response()->json(['user' => $user]);
     }
 
     public function update(CreateUpdateUser $request, $id)
     {
-        $newUser=$request->get('user');
+        $newUser = $request->get('user');
         $this->userService->updateUser($newUser, $id);
     }
 
     public function destroy($id)
     {
         $this->userService->deleteUser($id);
-    }
-
-
-    //problem
-    public function logoutApi(Request $request)
-    {
-        dd($request->user());
-        $user = $this->userService->getUser($request->get('user')['id']);
-        dump($user->tokens);
-        dd($user->currentAccessToken());
-        $user->currentAccessToken()->delete();
     }
 }

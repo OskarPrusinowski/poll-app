@@ -12,7 +12,8 @@ const state = {
         email: "",
         password: "",
         password_confirmation: "",
-        company_id: null
+        company_id: null,
+        role_id: null,
     },
     ok: true,
     dialog: true,
@@ -28,6 +29,7 @@ const getters = {
     getUsersIds: state => state.usersIds,
     getDialog: state => state.dialog,
     getUserCompanyId: state => state.user.company_id,
+    getUserRoleId: state => state.user.role_id,
     getUsersPage: state => state.usersPage,
     getUsersTotal: state => state.usersTotal,
     getUsersCount: state => state.usersCount
@@ -60,6 +62,9 @@ const mutations = {
     },
     setUserCompanyId(state, data) {
         state.user.company_id = data;
+    },
+    setUserRoleId(state, data) {
+        state.user.role_id = data;
     },
     setUsersIds(state, data) {
         state.usersIds = data;
@@ -114,6 +119,7 @@ const actions = {
         state.commit("setUserPassword", "");
         state.commit("setUserPasswordConfirmation", "");
         state.commit("setUserCompanyId", 0);
+        state.commit("setUserRoleId", null);
     },
     async updateUser(state, VueComponent) {
         const id = state.getters.getUserId;

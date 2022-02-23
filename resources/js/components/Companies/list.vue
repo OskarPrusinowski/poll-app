@@ -37,7 +37,8 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <div v-if="length != 1">
+
+    <div v-if="length > 1">
       <v-pagination
         v-model="page"
         :length="length"

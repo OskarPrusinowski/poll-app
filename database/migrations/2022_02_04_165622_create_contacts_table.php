@@ -13,6 +13,7 @@ class CreateContactsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('contacts');
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
             $table->string("name")->nullable();
@@ -21,7 +22,7 @@ class CreateContactsTable extends Migration
             $table->boolean('is_readed')->default(false);
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('campaign_id')->nullable()->unsigned();
+            $table->bigInteger('campaign_id')->nullable()->unsigned();
 
             $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('cascade')->onUpdate('cascade');
         });

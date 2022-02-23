@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content">
     <create :company_id="company_id" @added="changedAmountCampaigns" />
     <v-simple-table>
       <thead>
@@ -99,7 +99,7 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <div v-if="length != 1">
+    <div v-if="length > 1">
       <v-pagination
         v-model="page"
         :length="length"

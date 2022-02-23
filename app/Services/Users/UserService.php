@@ -24,6 +24,7 @@ class UserService
     {
         $user['password'] = Hash::make($user['password']);
         $user['company_id'] = $user['company_id'] != 0 ? $user['company_id'] : null;
+        $user['role_id'] = $user['role_id'] ? $user['company_id'] : 2;
         $this->userModel::create($user);
         return true;
     }

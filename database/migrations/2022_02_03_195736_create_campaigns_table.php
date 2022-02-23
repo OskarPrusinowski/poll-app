@@ -13,6 +13,7 @@ class CreateCampaignsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('campaigns');
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -25,7 +26,7 @@ class CreateCampaignsTable extends Migration
             $table->date('date_published')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('company_id')->nullable()->unsigned();
+            $table->bigInteger('company_id')->nullable()->unsigned();
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
         });

@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+        Schema::DropIfExists('users');
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -25,10 +26,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('last_login')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->integer('company_id')->nullable()->unsigned();
-
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
-
+            $table->bigInteger('company_id')->nullable()->unsigned();
         });
     }
 
