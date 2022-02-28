@@ -14,6 +14,8 @@ class ContactsController extends Controller
     public function __construct(ContactsService $contactsService)
     {
         $this->contactsService = $contactsService;
+        $this->middleware("permission:contactsShow");
+        $this->middleware("permission:contactsManage");
     }
 
     public function importContacts(ImportContacts $request)

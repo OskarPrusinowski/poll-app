@@ -23,4 +23,9 @@ class Campaign extends Model
     {
         return $this->hasMany(Contact::class);
     }
+
+    public function scopeFiltrByCompany($query, $companyId)
+    {
+        return $query->where('company_id', $companyId);
+    }
 }

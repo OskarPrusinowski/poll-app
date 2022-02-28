@@ -14,6 +14,8 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
+        $this->middleware("permission:usersShow");
+        $this->middleware("permission:usersManage");
     }
 
 
@@ -38,5 +40,18 @@ class UserController extends Controller
     public function destroy($id)
     {
         $this->userService->deleteUser($id);
+    }
+
+    public function getToken($id)
+    {
+        $user = $this->userService->getUser($id);
+        $token = $user->createToken('auth-token')->plainTextToken;
+        //dd($token);
+    }
+
+    public function getPermissions($id)
+    {
+        $permissions = $this->userService->getUser($id)->role->permissions;
+        return response()->json(['permissions' => $permissions]);
     }
 }

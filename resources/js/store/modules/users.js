@@ -165,6 +165,14 @@ const actions = {
             .then(response => {
                 state.commit("setUsersCount", response.data.count)
             })
+    },
+    getUserToken(state,VueComponent){
+        const id = state.getters.getUserId;
+        VueComponent.$http.get(urlUser + "getToken/" + id)
+            .then(response => {
+                request.headers.set("user-token", 2);
+                console.log(response);
+            })
     }
 };
 

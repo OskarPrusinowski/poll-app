@@ -21,7 +21,8 @@ const state = {
     camapignsPage: 1,
     campaignsTotal: 5,
     campaignsCount: 0,
-    contacts: []
+    contacts: [],
+    contactId: 0
 };
 const getters = {
     getCampaign: state => state.campaign,
@@ -34,6 +35,8 @@ const getters = {
     getCampaignsTotal: state => state.campaignsTotal,
     getCampaignsCount: state => state.campaignsCount,
     getContacts: state => state.contacts,
+    getContactId: state => state.contactId,
+    getCampaignFileName: state => state.campaign.file_name
 };
 const mutations = {
     setCampaign(state, data) {
@@ -89,6 +92,9 @@ const mutations = {
     },
     setContacts(state, data) {
         state.contacts = data;
+    },
+    setContactId(state, data) {
+        state.contactId = data;
     }
 };
 const actions = {
@@ -189,6 +195,20 @@ const actions = {
         await VueComponent.$http.get(urlCampaign + "contacts/" + id)
             .then(response => {
                 state.commit("setContacts", response.data.contacts);
+            })
+    },
+    getCampaignFile(state, VueComponent) {
+        const id = state.getters.getCampaignId;
+        VueComponent.$http.get(urlCampaign + "getFile/" + id)
+            .then(response => {
+                state.commit("setFile", response.data);
+            })
+    },
+    readContact(state, VueComponent) {
+        const id = state.getters.getContactId;
+        VueComponent.$http.post(urlContatcs + "read/" + id)
+            .then(response => {
+                console.log(response);
             })
     }
 };

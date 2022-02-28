@@ -25,10 +25,9 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Gate::define('hasPermission', function ($user=null) {
-            return true;
-            $permission=1;
-            return $per->checkPermission($permission);
+        Gate::define('hasPermission', function ($user = null, $permission) {
+
+            return PermissionsService::checkPermission($user, $permission);
         });
     }
 }

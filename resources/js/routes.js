@@ -4,6 +4,7 @@ import CompanyShow from './components/Companies/show'
 import CompanyList from './components/Companies/list'
 
 import CampaignsList from './components/Campaigns/list'
+import CampaignsRead from './components/Campaigns/read'
 
 
 export default{
@@ -24,6 +25,10 @@ export default{
         {
             path:'/campaigns/list',
             component:CampaignsList,
+        },
+        {
+            path:'/campaigns/read/:id/:contactId',
+            component:CampaignsRead,
         },
     ]
 }

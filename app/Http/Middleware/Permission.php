@@ -19,12 +19,9 @@ class Permission
      */
     public function handle(Request $request, Closure $next, $permission)
     {
-        $perm=new PermissionsService();
-        dd(Gate::allows('hasPermission'));
-        if (Gate::allows('hasPermission')) {
-            return "TAK";
+        if (Gate::allows('hasPermission', $permission)) {
+            return $next($request);
         }
-        return response()->json(['msg' => "wiadomość"], 403);
-        return $next($request);
+        return response()->json(['error' => "Brak dostępu"], 403);
     }
 }

@@ -7,13 +7,19 @@ use App\Models\Users\User;
 class PermissionsService
 {
 
-    public function checkPermission(User $user,$permission)
+    public static function checkPermission(User $user, $permission)
     {
-        dd($permission);
+        $userPermissions = $user->role->permissions;
+        foreach ($userPermissions as $userPermission) {
+            if ($userPermission->name == $permission) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public function all()
+    public function all(User $user)
     {
-        dd("all");
+        return $user->role->permissions;
     }
 }

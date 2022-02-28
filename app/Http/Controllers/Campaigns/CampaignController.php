@@ -14,6 +14,8 @@ class CampaignController extends Controller
     public function __construct(CampaignService $campaignService)
     {
         $this->campaignService = $campaignService;
+        $this->middleware("permission:campaignsShow");
+        $this->middleware("permission:campaignsManage");
     }
 
     public function show($id)

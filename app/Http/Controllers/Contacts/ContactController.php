@@ -13,6 +13,8 @@ class ContactController extends Controller
     public function __construct(ContactService $contactService)
     {
         $this->contactService = $contactService;
+        $this->middleware("permission:contactsShow");
+        $this->middleware("permission:contactsManage");
     }
 
     public function read($id)

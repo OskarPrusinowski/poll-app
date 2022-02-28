@@ -15,7 +15,8 @@ class UsersController extends Controller
     public function __construct(UsersService $usersService)
     {
         $this->usersService = $usersService;
-        $this->middleware("permission:oskar");
+        $this->middleware("permission:usersShow");
+        $this->middleware("permission:usersManage");
     }
 
     public function index(Request $request)
