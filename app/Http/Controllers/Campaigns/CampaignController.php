@@ -59,13 +59,6 @@ class CampaignController extends Controller
         return response()->json(['contacts' => $contacts]);
     }
 
-    public function getFile($id)
-    {
-        $file = $this->campaignService->getFile($id);
-        return response($file, 200)
-            ->header('Content-Type', 'application/pdf');
-    }
-
     public function destroyFile($id)
     {
         $this->campaignService->deleteFile($id);

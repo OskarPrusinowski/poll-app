@@ -13,14 +13,20 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Auth::routes();
+
+Route::get('/campaigns/read/{campaignIid}/{contactId}', function () {
+    return view('welcome');
+})->where('any', '.*');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/user', function (Request $request) {
-        return $request->user(); 
-       });
-Route::get('/{any}', function () {
-    return view('welcome');
-})->where('any','.*');
+        return $request->user();
+    });
+    Route::get('/{any}', function () {
+        return view('welcome');
+    })->where('any', '.*');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

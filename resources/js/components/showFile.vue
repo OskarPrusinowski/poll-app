@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div>
-      <v-btn depressed color="primary" :disabled="readed" @click="submit()">
-        Przeczytałem
-      </v-btn>
-    </div>
+    <v-btn depressed color="primary" @click="submit()"> Przeczytałem </v-btn>
     <pdf
       :src="'http://127.0.0.1:8000/main-api/campaigns/getFile/' + fileName"
     ></pdf>
@@ -12,13 +8,13 @@
 </template>
 
 <script>
-import store from "../../store/index";
+import store from "../store/index";
 import pdf from "vue-pdf";
 
 export default {
   data() {
     return {
-      readed: false,
+      readed: true,
     };
   },
   components: {
@@ -31,6 +27,7 @@ export default {
   },
   methods: {
     getFileName() {
+      //const id = this.$route.params.id;
       const id = this.$route.params.id;
       store.commit("setCampaign", {});
       store.commit("setCampaignId", id);

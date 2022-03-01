@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="red lighten-2"
+          color="primary"
           dark
           v-bind="attrs"
           v-on="on"
@@ -19,8 +19,12 @@
         </v-card-title>
 
         <v-card-text>
-          {{ campaign }}
-          <embed src="" type="application/pdf" width="200px" height="600px">
+          <pdf
+            :src="
+              'http://127.0.0.1:8000/main-api/campaigns/getFile/' +
+              campaign.file_name
+            "
+          ></pdf>
         </v-card-text>
 
         <v-divider></v-divider>
@@ -35,6 +39,7 @@
 </template>
 <script>
 import store from "../../store/index";
+import pdf from "vue-pdf";
 
 export default {
   props: ["campaign"],
@@ -42,6 +47,9 @@ export default {
     return {
       dialog: false,
     };
+  },
+  components: {
+    pdf,
   },
   methods: {
     getFile(campaign) {

@@ -142,6 +142,13 @@ const actions = {
                 state.commit("setCampaign", response.data.campaign);
             })
     },
+    getHashedCampaign(state, VueComponent) {
+        const id = state.getters.getCampaignId;
+        VueComponent.$http.get(urlCampaign + "showHashed/" + id)
+            .then(response => {
+                state.commit("setCampaign", response.data.campaign);
+            })
+    },
     getCampaigns(state, VueComponent) {
         const companyId = state.getters.getCampaignCompanyId;
         const page = state.getters.getCampaignsPage;

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Twilio\Rest\Client;
+use Hashids\Hashids;
 
 
 class CampaignService
@@ -69,15 +70,17 @@ class CampaignService
 
     public function sendSms($campaign)
     {
-        $contacts = $this->getCampaign($campaign['id'])->contacts;
+        $campaignId = $campaign['id'];
+        $contacts = $this->getCampaign($campaignId)->contacts;
         foreach ($contacts as $contact) {
             $client = new Client(env("TWILIO_SID"), env("TWILIO_TOKEN"));
             $number = "+48" . $contact->phone_number;
+            $link = $this::generateLink($campaignId, $contact->id);
             $client->messages->create(
                 $number,
                 [
                     'from' => env("TWILIO_FROM"),
-                    'body' => 'Hello from Twilio!'
+                    'body' => 'Hi please click this link: ' . $link
                 ]
             );
         }
@@ -108,5 +111,13 @@ class CampaignService
         $campaign->file_name = null;
         $campaign->orginal_file_name = null;
         $campaign->save();
+    }
+
+    public static function generateLink($campaignId, $contactId)
+    {
+        $hashids = new Hashids();
+        $mainLink = "http://127.0.0.1:8000/campaigns/read/";
+        $link = $mainLink . $hashids->encode($campaignId) . "/" . $hashids->encode($contactId);
+        return $link;
     }
 }

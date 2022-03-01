@@ -22,17 +22,7 @@
           <td>{{ campaign.comunication_type }}</td>
           <td>{{ campaign.date_registration }}</td>
           <td v-if="campaign.file_name">
-            <v-btn
-              depressed
-              color="primary"
-              :href="
-                'http://127.0.0.1:8000/main-api/campaigns/getFile/' +
-                campaign.id
-              "
-              target="_blank"
-            >
-              {{ campaign.orginal_file_name }}
-            </v-btn>
+            <show-file :campaign="campaign" />
             <v-btn
               color="error"
               fab
