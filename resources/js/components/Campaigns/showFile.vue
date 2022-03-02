@@ -20,10 +20,11 @@
 
         <v-card-text>
           <pdf
-            :src="
-              'http://127.0.0.1:8000/main-api/campaigns/getFile/' +
-              campaign.file_name
-            "
+            :src="src"
+            v-for="i in numPages"
+            :key="i"
+            :page="i"
+            style="margin-left: auto; margin-right: auto; width: 100%"
           ></pdf>
         </v-card-text>
 
@@ -46,6 +47,8 @@ export default {
   data() {
     return {
       dialog: false,
+      src: "",
+      numPages: undefined,
     };
   },
   components: {
@@ -56,6 +59,16 @@ export default {
       store.commit("setCampaign", campaign);
       console.log(store.getters.getCampaign);
     },
+  },
+  mounted() {
+    var loadingTask = pdf.createLoadingTask(
+      "http://127.0.0.1:8000/main-api/campaigns/getFile/" +
+        this.campaign.file_name
+    );
+    this.src = loadingTask;
+    this.src.promise.then((pdf) => {
+      this.numPages = pdf.numPages;
+    });
   },
 };
 </script>

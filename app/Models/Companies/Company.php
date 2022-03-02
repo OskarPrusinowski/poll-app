@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Users\User;
 use App\Models\Campaigns\Campaign;
-
+use App\Models\Settings\CompanySettings;
 
 class Company extends Model
 {
-    use HasFactory,softDeletes;
+    use HasFactory, softDeletes;
 
-    protected $fillable=[
+    protected $fillable = [
         'name',
         'compressed_name',
         'description',
@@ -27,5 +27,10 @@ class Company extends Model
     public function campaigns()
     {
         return $this->hasMany(Campaign::class);
+    }
+
+    public function companySettings()
+    {
+        return $this->hasOne(CompanySettings::class);
     }
 }

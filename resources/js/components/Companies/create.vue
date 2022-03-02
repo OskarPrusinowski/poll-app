@@ -70,10 +70,13 @@ export default {
     },
   },
   methods: {
-    createCompany(name) {
+    async createCompany(name) {
       store.commit("setCompany", {});
       store.commit("setCompanyName", name);
-      store.dispatch("createCompany", this);
+      await store.dispatch("createCompany", this);
+      store.dispatch("fetchCompanySettingsInit");
+      store.dispatch("createCompanySettings", this);
+      store.commit("setCompanySettingsCompanyId", 1);
       this.loading = false;
       this.dialog = false;
       store.dispatch("getCompanies", this);

@@ -6,29 +6,35 @@ import CompanyList from './components/Companies/list'
 import CampaignsList from './components/Campaigns/list'
 import CampaignsRead from './components/Campaigns/read'
 
+import companySettings from './components/CompanySettings/settings'
 
-export default{
-    mode:'history',
-    routes:[
+
+export default {
+    mode: 'history',
+    routes: [
         {
-            path:'/users/list',
-            component:UserList
+            path: '/users/list',
+            component: UserList
         },
         {
-            path:'/companies/list',
-            component:CompanyList
+            path: '/companies/list',
+            component: CompanyList
         },
         {
-            path:'/companies/:id',
-            component:CompanyShow,
+            path: '/companies/:id',
+            component: CompanyShow,
         },
         {
-            path:'/campaigns/list',
-            component:CampaignsList,
+            path: '/campaigns/list',
+            component: CampaignsList,
         },
         {
-            path:'/campaigns/read/:id/:contactId',
-            component:CampaignsRead,
+            path: '/campaigns/read/:id/:contactId',
+            component: CampaignsRead,
+        },
+        {
+            path: '/campaigns/settings',
+            component: companySettings,
         },
     ]
 }

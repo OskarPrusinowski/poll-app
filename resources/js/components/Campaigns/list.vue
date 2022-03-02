@@ -38,7 +38,7 @@
             <add-file :campaign="campaign" @added="getCampaigns" />
           </td>
           <td v-if="campaign.date_published">
-            <v-btn depressed disabled> Opublikowane </v-btn>
+            <showContactsReaded :campaign="campaign" />
           </td>
           <td v-else-if="campaign.is_contact_list == 1">
             <import-contacts
@@ -132,6 +132,7 @@ import addFile from "./addFile.vue";
 import importContacts from "./importContacts.vue";
 import showContacts from "./showContacts.vue";
 import showFile from "./showFile.vue";
+import showContactsReaded from "./showContactsReaded.vue";
 
 export default {
   data() {
@@ -146,6 +147,7 @@ export default {
     importContacts: importContacts,
     showContacts: showContacts,
     showFile: showFile,
+    showContactsReaded: showContactsReaded,
   },
   computed: {
     user() {

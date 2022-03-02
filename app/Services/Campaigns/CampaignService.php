@@ -62,16 +62,21 @@ class CampaignService
 
     public function sendMail($campaign)
     {
-        $contacts = $this->getCampaign($campaign['id'])->contacts;
+        $campaign = $this->getCampaign($campaign['id']);
+        $contacts = $campaign->contacts;
+        $companySettigns = $campaign->company->companySettings;
         foreach ($contacts as $contact) {
-            Mail::to($contact->email)->send(new CampaignMail($campaign, $contact));
+            $link = $this::generateLink($campaign->id, $contact->id);
+            Mail::to($contact->email)->send(new CampaignMail($campaign, $contact, $companySettigns, $link));
         }
     }
 
     public function sendSms($campaign)
     {
         $campaignId = $campaign['id'];
-        $contacts = $this->getCampaign($campaignId)->contacts;
+        $campaign = $this->getCampaign($campaignId);
+        $contacts = $campaign->contacts;
+        $companySettigns = $campaign->company->companySettings;
         foreach ($contacts as $contact) {
             $client = new Client(env("TWILIO_SID"), env("TWILIO_TOKEN"));
             $number = "+48" . $contact->phone_number;
@@ -80,7 +85,7 @@ class CampaignService
                 $number,
                 [
                     'from' => env("TWILIO_FROM"),
-                    'body' => 'Hi please click this link: ' . $link
+                    'body' => $companySettigns->sms_body . " " . $link
                 ]
             );
         }

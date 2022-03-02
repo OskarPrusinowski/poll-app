@@ -16,11 +16,13 @@ use Illuminate\Http\Request;
 
 Auth::routes();
 
+Route::get('/complete-registration', [App\Http\Controllers\Auth\RegisterController::class, 'completeRegistration'])->name('complete-registration');
+
 Route::get('/campaigns/read/{campaignIid}/{contactId}', function () {
     return view('welcome');
 })->where('any', '.*');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', '2fa'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });

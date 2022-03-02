@@ -33,7 +33,10 @@
               Kampanie
             </v-btn></router-link
           >
-          <router-link to="/" v-if="permissions.campaignsShow">
+          <router-link
+            to="/campaigns/settings"
+            v-if="permissions.campaignsShow"
+          >
             <v-btn depressed> Ustawienia </v-btn></router-link
           >
         </div>

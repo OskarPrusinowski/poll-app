@@ -142,9 +142,9 @@ const actions = {
                 state.commit("setCampaign", response.data.campaign);
             })
     },
-    getHashedCampaign(state, VueComponent) {
+    async getHashedCampaign(state, VueComponent) {
         const id = state.getters.getCampaignId;
-        VueComponent.$http.get(urlCampaign + "showHashed/" + id)
+        await VueComponent.$http.get(urlCampaign + "showHashed/" + id)
             .then(response => {
                 state.commit("setCampaign", response.data.campaign);
             })

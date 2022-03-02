@@ -4,6 +4,7 @@ import users from './modules/users'
 import companies from './modules/companies'
 import campaigns from './modules/campaigns'
 import permissions from './modules/permissions'
+import companySettigns from './modules/companySettings'
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
         users,
         companies,
         campaigns,
-        permissions
+        permissions,
+        companySettigns
     }
 })

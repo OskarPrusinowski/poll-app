@@ -6,7 +6,11 @@
       </v-btn>
     </div>
     <pdf
-      :src="'http://127.0.0.1:8000/main-api/campaigns/getFile/' + fileName"
+      :src="src"
+      v-for="i in numPages"
+      :key="i"
+      :page="i"
+      style="margin-left: auto; margin-right: auto; width: 52%"
     ></pdf>
   </div>
 </template>
@@ -15,10 +19,16 @@
 import store from "../../store/index";
 import pdf from "vue-pdf";
 
+var loadingTask = pdf.createLoadingTask(
+  "http://127.0.0.1:8000/main-api/campaigns/getFile/1.pdf"
+);
+
 export default {
   data() {
     return {
       readed: false,
+      src: "",
+      numPages: undefined,
     };
   },
   components: {
@@ -30,11 +40,12 @@ export default {
     },
   },
   methods: {
-    getFileName() {
+    async getFileName() {
       const id = this.$route.params.id;
       store.commit("setCampaign", {});
       store.commit("setCampaignId", id);
-      store.dispatch("getHashedCampaign", this);
+      await store.dispatch("getHashedCampaign", this);
+      console.log(store.getters.getCampaign);
     },
     submit() {
       this.readed = true;
@@ -43,8 +54,15 @@ export default {
       store.dispatch("readContact", this);
     },
   },
-  created() {
-    this.getFileName();
+  async created() {
+    await this.getFileName();
+    var loadingTask = pdf.createLoadingTask(
+      "http://127.0.0.1:8000/main-api/campaigns/getFile/" + this.fileName
+    );
+    this.src = loadingTask;
+    this.src.promise.then((pdf) => {
+      this.numPages = pdf.numPages;
+    });
   },
 };
 </script>

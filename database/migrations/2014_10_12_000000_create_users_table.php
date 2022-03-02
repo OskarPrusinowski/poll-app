@@ -13,7 +13,6 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::DropIfExists('users');
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -23,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();
+            $table->text('google2fa_secret');
             $table->timestamp('last_login')->nullable();
             $table->timestamps();
             $table->softDeletes();
