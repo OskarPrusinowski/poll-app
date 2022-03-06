@@ -7,6 +7,7 @@ use App\Http\Controllers\Users\UserController;
 
 
 Route::get('/list', [UsersController::class, 'index']);
+Route::get('/role/list', [UsersController::class, 'getByRoleUsers']);
 
 Route::post('/delete', [UsersController::class, 'destroyUsers']);
 Route::get('/count', [UsersController::class, 'getAmountUsers']);

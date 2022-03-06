@@ -37,22 +37,33 @@
               <v-radio label="Numer telefonu" value="phone"></v-radio
             ></v-radio-group>
           </v-col>
-          <v-col class="ma-0 pb-0 pt-0" md="10">
+          <v-col class="ma-0 pb-0 pt-2" md="10">
             <v-row justify="center">
+              <legend
+                class="v-label theme--light"
+                style="left: 0px; right: auto; position: relative"
+              >
+                Termin rejsetracji potwierdzeń
+              </legend>
               <v-date-picker v-model="picker"></v-date-picker>
+            </v-row>
+            <v-row justify="center">
+              <v-time-picker
+                format="24hr"
+                v-model="campaign.hour_registration"
+              ></v-time-picker>
             </v-row>
           </v-col>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              depressed
-              color="error"
-              type="submit"
-              @click="dialog = false"
-              :loading="loading"
+            <v-btn depressed color="error" type="submit" @click="dialog = false"
               >Anuluj</v-btn
             >
-            <v-btn depressed color="primary" @click="submit()"
+            <v-btn
+              depressed
+              color="primary"
+              @click="submit()"
+              :loading="loading"
               >Dodaj kampanię</v-btn
             >
           </v-card-actions>
@@ -109,6 +120,11 @@ export default {
       )
         .toISOString()
         .substr(0, 10);
+    },
+  },
+  watch: {
+    dialog() {
+      this.$refs.form.reset();
     },
   },
 };

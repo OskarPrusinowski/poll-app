@@ -33,11 +33,14 @@
               Kampanie
             </v-btn></router-link
           >
-          <router-link
-            to="/campaigns/settings"
-            v-if="permissions.campaignsShow"
-          >
-            <v-btn depressed> Ustawienia </v-btn></router-link
+          <router-link to="/campaigns/settings" v-if="permissions.settingsShow">
+            <v-btn
+              depressed
+              @click="disableSettings"
+              :disabled="isDisabledSettings"
+            >
+              Ustawienia
+            </v-btn></router-link
           >
         </div>
       </div></v-card
@@ -55,6 +58,7 @@ export default {
       isDisabledUser: false,
       isDisabledCompany: false,
       isDisabledCampaign: false,
+      isDisabledSettings: false,
     };
   },
   computed: {
@@ -67,20 +71,32 @@ export default {
       this.isDisabledUser = true;
       this.isDisabledCompany = false;
       this.isDisabledCampaign = false;
+      this.isDisabledSettings = false;
     },
     disableCompany() {
       this.isDisabledCompany = true;
       this.isDisabledUser = false;
       this.isDisabledCampaign = false;
+      this.isDisabledSettings = false;
     },
     disableCampaign() {
       this.isDisabledCompany = false;
       this.isDisabledUser = false;
       this.isDisabledCampaign = true;
+      this.isDisabledSettings = false;
+    },
+    disableSettings() {
+      this.isDisabledCompany = false;
+      this.isDisabledUser = false;
+      this.isDisabledCampaign = false;
+      this.isDisabledSettings = true;
     },
     makeDisPath() {
       const mainPath = this.$route.path.split("/")[1];
-      if (mainPath == "users") {
+      const lastPar = this.$route.path.split("/")[2];
+      if (lastPar == "settings") {
+        this.disableSettings();
+      } else if (mainPath == "users") {
         this.disableUser();
       } else if (mainPath == "companies") {
         this.disableCompany();

@@ -42,7 +42,7 @@
               label="Numer telefonu"
               outlined
               v-model="user.phone_number"
-              :rules="[rules.required]"
+              :rules="[rules.required, rules.phoneNumber]"
             ></v-text-field>
           </v-col>
           <v-col md="10">
@@ -110,7 +110,7 @@ export default {
           if (!v.trim()) return true;
           if (!isNaN(parseFloat(v)) && v >= 100000000 && v <= 999999999)
             return true;
-          return "Number has to be phone number";
+          return "Liczba musi być numerem telefonu";
         },
         email: (value) => {
           const pattern =
@@ -143,7 +143,6 @@ export default {
         this.snackbar = true;
       } else {
         this.dialog = false;
-        store.dispatch("getUsers", this);
         this.$emit("added");
       }
     },
@@ -159,16 +158,13 @@ export default {
     open() {
       this.loading = false;
       store.dispatch("fetchUserInit");
+      this.getCompanies();
     },
   },
   watch: {
     dialog() {
       this.$refs.form.reset();
     },
-  },
-  created() {
-    store.dispatch("fetchUserInit", this);
-    this.getCompanies();
   },
 };
 </script>

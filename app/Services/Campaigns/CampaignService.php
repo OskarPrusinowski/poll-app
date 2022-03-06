@@ -25,6 +25,8 @@ class CampaignService
 
     public function create($campaign)
     {
+        $campaign['date_registration'] = Carbon::create($campaign['date_registration'] . $campaign['hour_registration']);
+        unset($campaign['hour_registration']);
         $this->campaignModel::create($campaign);
         return true;
     }

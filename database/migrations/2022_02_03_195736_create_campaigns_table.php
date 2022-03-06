@@ -18,7 +18,7 @@ class CreateCampaignsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('comunication_type')->nullable();
-            $table->date('date_registration')->nullable();
+            $table->dateTime('date_registration')->nullable();
             $table->string('file_name')->nullable();
             $table->string('orginal_file_name')->nullable();
             $table->boolean('is_contact_list')->default(false);

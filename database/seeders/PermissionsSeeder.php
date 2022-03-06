@@ -12,7 +12,7 @@ class PermissionsSeeder extends Seeder
      *
      * @return void
      */
-    protected $permissions = ['usersShow', 'usersManage', 'companiesShow', 'companiesManage', 'campaignsShow', 'campaignsManage', 'contactsShow', 'contactsManage'];
+    protected $permissions = ['usersShow', 'usersManage', 'companiesShow', 'companiesManage', 'campaignsShow', 'campaignsManage', 'contactsShow', 'contactsManage', 'settingsShow', 'settingsManage'];
 
     public function run()
     {

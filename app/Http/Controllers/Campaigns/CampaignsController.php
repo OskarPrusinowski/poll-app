@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Campaigns;
 use App\Http\Controllers\Controller;
 use App\Services\Campaigns\CampaignsService;
 use Illuminate\Http\Request;
+use App\Http\Requests\Campaigns\PaginateCampaigns;
 
 class CampaignsController extends Controller
 {
@@ -17,7 +18,7 @@ class CampaignsController extends Controller
         $this->middleware("permission:campaignsManage");
     }
 
-    public function getCampaigns(Request $request, $companyId)
+    public function getCampaigns(PaginateCampaigns $request, $companyId)
     {
         $campaigns = $this->campaignsService->getCamapigns($companyId, $request->page, $request->total);
         return response()->json(['campaigns' => $campaigns]);

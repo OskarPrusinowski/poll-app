@@ -7,12 +7,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading font-weight-bold">Register</div>
                     <hr>
-                    @if ($errors->any())
-                        <b style="color: red">{{ $errors->first() }}</b>
+                    @if (count($errors) > 0)
+                        <b style="color: red">{{ $errors[0] }}</b>
                     @endif
-
                     <div class="panel-body">
-                        <form class="form-horizontal" method="POST" action="/google2fa/authenticate">
+                        <form action="/google2fa/authenticate" method="POST">
                             {{ csrf_field() }}
 
                             <div class="form-group">

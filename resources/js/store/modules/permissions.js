@@ -9,6 +9,8 @@ const state = {
     campaignsManage: false,
     contactsShow: false,
     contactsManage: false,
+    settingsShow: false,
+    settingsManage: false,
     userId: 0
 };
 
@@ -21,6 +23,8 @@ const getters = {
     getCampaignsManage: state => state.campaignsManage,
     getContactsShow: state => state.contactsShow,
     getContactsManage: state => state.contactsManage,
+    getSettingsShow: state => state.settingsShow,
+    getSettingsManage: state => state.settingsManage,
     getPermissionsUserId: state => state.userId,
     getUserPermissions: state => state
 };
@@ -53,6 +57,12 @@ const mutations = {
     },
     setContactsManage(state, data) {
         state.contactsManage = data;
+    },
+    setSettingsShow(state, data) {
+        state.settingsShow = data;
+    },
+    setSettingsManage(state, data) {
+        state.settingsManage = data;
     },
 };
 
@@ -93,9 +103,14 @@ const actions = {
                 case 'contactsManage':
                     state.commit("setContactsManage", true);
                     break;
+                case 'settingsShow':
+                    state.commit("setSettingsShow", true);
+                    break;
+                case 'settingsManage':
+                    state.commit("setSettingsManage", true);
+                    break;
             }
         }
-        console.log(state);
     }
 };
 

@@ -19,7 +19,8 @@ const state = {
     dialog: true,
     usersPage: 1,
     usersTotal: 5,
-    usersCount: 0
+    usersCount: 0,
+    role_id: 1
 };
 
 const getters = {
@@ -32,7 +33,8 @@ const getters = {
     getUserRoleId: state => state.user.role_id,
     getUsersPage: state => state.usersPage,
     getUsersTotal: state => state.usersTotal,
-    getUsersCount: state => state.usersCount
+    getUsersCount: state => state.usersCount,
+    getUsersRoleId: state => state.role_id,
 };
 
 const mutations = {
@@ -70,7 +72,7 @@ const mutations = {
         state.usersIds = data;
     },
     setUserPhoneNumber(state, data) {
-        state.phone_number = data;
+        state.user.phone_number = data;
     },
     setDialog(state, data) {
         state.dialog = data;
@@ -83,6 +85,9 @@ const mutations = {
     },
     setUsersCount(state, data) {
         state.usersCount = data;
+    },
+    setUsersRoleId(state, data) {
+        state.role_id = data;
     }
 };
 
@@ -112,6 +117,7 @@ const actions = {
             })
     },
     async fetchUserInit(state) {
+        console.log(state);
         state.commit("setUserName", "");
         state.commit("setUserSurname", "");
         state.commit("setUserPhoneNumber", 0);
@@ -120,6 +126,7 @@ const actions = {
         state.commit("setUserPasswordConfirmation", "");
         state.commit("setUserCompanyId", 0);
         state.commit("setUserRoleId", null);
+        console.log(state);
     },
     async updateUser(state, VueComponent) {
         const id = state.getters.getUserId;
@@ -166,14 +173,23 @@ const actions = {
                 state.commit("setUsersCount", response.data.count)
             })
     },
-    getUserToken(state,VueComponent){
+    getUserToken(state, VueComponent) {
         const id = state.getters.getUserId;
         VueComponent.$http.get(urlUser + "getToken/" + id)
             .then(response => {
                 request.headers.set("user-token", 2);
                 console.log(response);
             })
-    }
+    },
+    async getByRoleUsers(state, VueComponent) {
+        const page = state.getters.getUsersPage;
+        const total = state.getters.getUsersTotal;
+        const roleId = state.getters.getUsersRoleId;
+        VueComponent.$http.get(urlUser + "role/list?page=" + page + "&total=" + total + "&roleId=" + roleId)
+            .then(response => {
+                state.commit("setUsers", response.data.users);
+            })
+    },
 };
 
 export default {

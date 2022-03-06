@@ -8,6 +8,7 @@ const state = {
         name: "",
         comunication_type: "",
         date_registration: null,
+        hour_registration: null,
         file_name: "",
         company_id: 0,
         is_contact_list: false,
@@ -36,7 +37,8 @@ const getters = {
     getCampaignsCount: state => state.campaignsCount,
     getContacts: state => state.contacts,
     getContactId: state => state.contactId,
-    getCampaignFileName: state => state.campaign.file_name
+    getCampaignFileName: state => state.campaign.file_name,
+    getCampaignHourRegistration: state => state.campaign.hour_registration
 };
 const mutations = {
     setCampaign(state, data) {
@@ -89,6 +91,9 @@ const mutations = {
     },
     setCampaignIsAnonymizated(state, data) {
         state.campaign.is_anonymizated = data;
+    },
+    setCampaignHourRegistration(state, data) {
+        state.campaign.hour_registration = data;
     },
     setContacts(state, data) {
         state.contacts = data;
@@ -185,6 +190,7 @@ const actions = {
         state.commit("setCampaignName", "");
         state.commit("setCampaignComunicationType", "");
         state.commit("setCampaignDateRegistration", null);
+        state.commit("setCampaignHourRegistration", "12:00")
         state.commit("setCampaignFileName", "");
         state.commit("setCampaignIsContactList", false);
         state.commit("setCampaignDatePublished", null);

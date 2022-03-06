@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Campaigns\CampaignService;
 use App\Http\Requests\Campaigns\CreateCampaign;
+use App\Http\Requests\Campaigns\AddFileCampaign;
 
 class CampaignController extends Controller
 {
@@ -30,7 +31,7 @@ class CampaignController extends Controller
         $this->campaignService->create($campaign);
     }
 
-    public function addFile(Request $request)
+    public function addFile(AddFileCampaign $request)
     {
         $file = $request->file("file");
         $id = $request->id;

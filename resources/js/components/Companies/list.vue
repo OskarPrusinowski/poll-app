@@ -1,6 +1,6 @@
 <template>
-  <div class="content">
-    <create />
+  <div class="content" v-if="permissions.companiesShow">
+    <create v-if="permissions.companiesManage" @added="addedCompanies" />
 
     <v-simple-table>
       <thead>
@@ -27,10 +27,20 @@
             </v-btn>
           </td>
           <td class="text-left">
-            <change-name :company="company" />
+            <change-name
+              :company="company"
+              v-if="permissions.companiesManage"
+            />
           </td>
           <td class="text-left">
-            <v-btn color="error" fab small dark @click="deleteCompany(company)">
+            <v-btn
+              color="error"
+              fab
+              small
+              dark
+              @click="deleteCompany(company)"
+              v-if="permissions.companiesManage"
+            >
               <v-icon>mdi-trash-can</v-icon>
             </v-btn>
           </td>
@@ -38,7 +48,7 @@
       </tbody>
     </v-simple-table>
 
-    <div v-if="length > 1">
+    <div v-if="length > 1 || itemsPerPage != itemsPerPageArray[0]">
       <v-pagination
         v-model="page"
         :length="length"
@@ -85,6 +95,9 @@ export default {
     changeName: changeName,
   },
   computed: {
+    permissions() {
+      return store.getters.getUserPermissions;
+    },
     companies() {
       return store.getters.getCompanies;
     },
@@ -115,7 +128,7 @@ export default {
     deleteCompany(company) {
       store.commit("setCompany", company);
       store.dispatch("deleteCompany", this);
-      store.dispatch("getCompanies", this);
+      this.deletedCompany();
     },
     deleteCompanies(ids) {
       store.commit("setCompaniesIds", ids);
@@ -155,6 +168,17 @@ export default {
       this.itemsPerPage = number;
       store.commit("setCompaniesPage", 1);
       this.getCompanies();
+    },
+    deletedCompany() {
+      this.getCompanies();
+      this.changeCountCompanies(-1);
+    },
+    changeCountCompanies(n) {
+      store.commit("setCompaniesCount", store.getters.getCompaniesCount + n);
+    },
+    addedCompanies() {
+      this.getCompanies();
+      this.changeCountCompanies(1);
     },
   },
   created() {

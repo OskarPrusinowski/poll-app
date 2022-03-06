@@ -19,10 +19,6 @@
 import store from "../../store/index";
 import pdf from "vue-pdf";
 
-var loadingTask = pdf.createLoadingTask(
-  "http://127.0.0.1:8000/main-api/campaigns/getFile/1.pdf"
-);
-
 export default {
   data() {
     return {

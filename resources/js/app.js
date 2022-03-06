@@ -3,7 +3,6 @@ import routes from './routes'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import mainVue from './components/mainVue'
-import showFile from './components/showFile'
 import Vuetify from '../plugins/vuetify'
 
 
@@ -30,10 +29,3 @@ const app = new Vue({
     }
 });
 
-const bab = new Vue({
-    vuetify: Vuetify,
-    el: '#showFile',
-    components: {
-        showFile
-    }
-});

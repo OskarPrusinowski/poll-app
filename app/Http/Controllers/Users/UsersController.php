@@ -7,6 +7,7 @@ use App\Services\Users\UsersService;
 use Illuminate\Http\Request;
 use App\Http\Requests\Users\DestroyUsers;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\Users\PaginateUsers;
 
 class UsersController extends Controller
 {
@@ -19,9 +20,15 @@ class UsersController extends Controller
         $this->middleware("permission:usersManage");
     }
 
-    public function index(Request $request)
+    public function index(PaginateUsers $request)
     {
         $users = $this->usersService->getUsersList($request->page, $request->total);
+        return response()->json(['users' => $users]);
+    }
+
+    public function getByRoleUsers(PaginateUsers $request)
+    {
+        $users = $this->usersService->getByRoleUsersList($request->page, $request->total, $request->roleId);
         return response()->json(['users' => $users]);
     }
 

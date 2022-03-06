@@ -54,4 +54,14 @@ class User extends Authenticatable
     {
         return decrypt($value);
     }
+
+    public function scopeFiltrByRole($query, $roleId)
+    {
+        return $query->where('role_id', $roleId);
+    }
+
+    public function scopeOwnPaginate($query, $page, $total)
+    {
+        return $query->limit($total)->offset(($page - 1) * $total);
+    }
 }

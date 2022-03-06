@@ -1,6 +1,10 @@
 <template>
-  <div class="content">
-    <create :company_id="company_id" @added="changedAmountCampaigns" />
+  <div class="content" v-if="permissions.campaignsShow">
+    <create
+      :company_id="company_id"
+      @added="addedCampaigns"
+      v-if="permissions.campaignsManage"
+    />
     <v-simple-table>
       <thead>
         <tr>
@@ -35,13 +39,21 @@
             </v-btn>
           </td>
           <td v-else>
-            <add-file :campaign="campaign" @added="getCampaigns" />
+            <add-file
+              :campaign="campaign"
+              @added="getCampaigns"
+              v-if="permissions.campaignsManage"
+            />
           </td>
           <td v-if="campaign.date_published">
-            <showContactsReaded :campaign="campaign" />
+            <showContactsReaded
+              :campaign="campaign"
+              v-if="permissions.campaignsManage"
+            />
           </td>
           <td v-else-if="campaign.is_contact_list == 1">
             <import-contacts
+              v-if="permissions.campaignsManage"
               :action="'Edytuj'"
               :campaign="campaign"
               @added="getCampaigns"
@@ -49,6 +61,7 @@
           </td>
           <td v-else>
             <import-contacts
+              v-if="permissions.campaignsManage"
               :action="'Dodaj'"
               :campaign="campaign"
               @added="getCampaigns"
@@ -56,7 +69,12 @@
           </td>
           <td v-if="campaign.date_published">{{ campaign.date_published }}</td>
           <td v-else>
-            <v-btn depressed color="primary" @click="release(campaign)">
+            <v-btn
+              depressed
+              color="primary"
+              @click="release(campaign)"
+              v-if="permissions.campaignsManage"
+            >
               Publikuj
             </v-btn>
           </td>
@@ -70,6 +88,7 @@
                 campaign.date_published != null || campaign.is_anonymizated == 1
               "
               @click="anonymizate(campaign)"
+              v-if="permissions.campaignsManage"
             >
               <v-icon>mdi-account</v-icon>
             </v-btn>
@@ -82,6 +101,7 @@
               dark
               :disabled="campaign.date_published"
               @click="deleteCampaign(campaign)"
+              v-if="permissions.campaignsManage"
             >
               <v-icon>mdi-trash-can</v-icon>
             </v-btn>
@@ -89,7 +109,7 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <div v-if="length > 1">
+    <div v-if="length > 1 || itemsPerPage != itemsPerPageArray[0]">
       <v-pagination
         v-model="page"
         :length="length"
@@ -150,6 +170,9 @@ export default {
     showContactsReaded: showContactsReaded,
   },
   computed: {
+    permissions() {
+      return store.getters.getUserPermissions;
+    },
     user() {
       return store.getters.getUser;
     },
@@ -193,6 +216,9 @@ export default {
     countCampaigns() {
       store.dispatch("getCampaignsCount", this);
     },
+    changeCountCampaigns(n) {
+      store.commit("setCampaignsCount", store.getters.getCampaignsCount + n);
+    },
     async deleteCampaign(campaign) {
       store.commit("setCampaign", campaign);
       await store.dispatch("deleteCampaign", this);
@@ -201,7 +227,7 @@ export default {
     async deleteFile(campaign) {
       store.commit("setCampaign", campaign);
       await store.dispatch("deleteCampaignFile", this);
-      this.getCampaigns();
+      this.deletedCampaigns();
     },
     async anonymizate(campaign) {
       store.commit("setCampaign", campaign);
@@ -210,9 +236,13 @@ export default {
       await store.dispatch("anonymizate", this);
       store.dispatch("updateCampaign", this);
     },
-    changedAmountCampaigns() {
+    deletedCampaigns() {
       this.getCampaigns();
-      this.countCampaigns();
+      this.changeCountCampaigns(-1);
+    },
+    addedCampaigns() {
+      this.getCampaigns();
+      this.changeCountCampaigns(1);
     },
     updateItemsPerPage(number) {
       this.itemsPerPage = number;

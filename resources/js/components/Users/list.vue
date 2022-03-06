@@ -1,6 +1,10 @@
 <template>
-  <div class="content">
-    <create :company_id="null" />
+  <div class="content" v-if="permissions.usersShow">
+    <create
+      :company_id="null"
+      v-if="permissions.usersManage"
+      @added="addedUser"
+    />
     <v-simple-table>
       <thead>
         <tr>
@@ -11,7 +15,6 @@
           <th class="text-left">Email</th>
           <th class="text-left">Data utworzenia</th>
           <th class="text-left">Data ostatniego logowania</th>
-          <th class="text-left">Firma</th>
           <th class="text-left">Eydtuj</th>
           <th class="text-left">Usuń</th>
         </tr>
@@ -30,22 +33,25 @@
             {{ moment(user.last_login).format("MMMM Do YYYY, h:mm:ss a") }}
           </td>
           <td v-else></td>
-          <td class="text-left" v-if="user.company">
-            {{ user.company.name }}
-          </td>
-          <td v-else></td>
           <td class="text-left">
-            <update :user="user" />
+            <update :user="user" v-if="permissions.usersManage" />
           </td>
           <td class="text-left">
-            <v-btn color="error" fab small dark @click="deleteUser(user)">
+            <v-btn
+              color="error"
+              fab
+              small
+              dark
+              @click="deleteUser(user)"
+              v-if="permissions.usersManage"
+            >
               <v-icon>mdi-trash-can</v-icon>
             </v-btn>
           </td>
         </tr>
       </tbody>
     </v-simple-table>
-    <div v-if="length > 1">
+    <div v-if="length > 1 || itemsPerPage != itemsPerPageArray[0]">
       <v-pagination
         v-model="page"
         :length="length"
@@ -84,6 +90,7 @@
 import store from "../../store/index";
 import create from "./create.vue";
 import update from "./update.vue";
+import choseCompany from "./choseCompany.vue";
 
 import moment from "moment";
 
@@ -91,6 +98,7 @@ export default {
   components: {
     create: create,
     update: update,
+    choseCompany: choseCompany,
   },
   data() {
     return {
@@ -105,6 +113,9 @@ export default {
     };
   },
   computed: {
+    permissions() {
+      return store.getters.getUserPermissions;
+    },
     users() {
       return store.getters.getUsers;
     },
@@ -120,12 +131,13 @@ export default {
   methods: {
     getUsers() {
       store.commit("setUsersTotal", this.itemsPerPage);
-      store.dispatch("getUsers", this);
+      store.commit("setUsersRoleId", 1);
+      store.dispatch("getByRoleUsers", this);
     },
     deleteUser(user) {
       store.commit("setUser", user);
       store.dispatch("deleteUser", this);
-      store.dispatch("getUsers", this);
+      this.deletedUser();
     },
     showCreateForm() {
       if (this.showDialog) {
@@ -182,6 +194,17 @@ export default {
       this.itemsPerPage = number;
       store.commit("setUsersPage", 1);
       this.getUsers();
+    },
+    changeCountUsers(n) {
+      store.commit("setUsersCount", store.getters.getUsersCount + n);
+    },
+    deletedUser() {
+      this.getUsers();
+      this.changeCountUsers(-1);
+    },
+    addedUser() {
+      this.getUsers();
+      this.changeCountUsers(1);
     },
   },
   created() {

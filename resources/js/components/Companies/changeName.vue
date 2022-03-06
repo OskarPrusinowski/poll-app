@@ -68,9 +68,5 @@ export default {
       store.dispatch("getCompanies", this);
     },
   },
-  created() {
-    store.commit("setCompanyId", this.id);
-    store.dispatch("getCompany", this);
-  },
 };
 </script>

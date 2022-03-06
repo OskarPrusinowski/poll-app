@@ -16,8 +16,14 @@ class UsersService
 
     public function getUsersList($page, $total)
     {
-        return $this->userModel->with("company")->limit($total)->offset(($page - 1) * $total)->get();
+        return $this->userModel->with("company")->ownPaginate($page, $total)->get();
     }
+
+    public function getByRoleUsersList($page, $total,$roleId)
+    {
+        return $this->userModel->with("company")->filtrByRole($roleId)->ownPaginate($page, $total)->get();
+    }
+
 
     public function deleteUsers($ids)
     {

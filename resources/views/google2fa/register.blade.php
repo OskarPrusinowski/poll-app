@@ -21,8 +21,10 @@
                                 <a href="/complete-registration"><button class="btn-primary">Complete
                                         Registration</button></a>
                                 @foreach ($registration_data as $key => $data)
-                                    <input type="hidden" name="{{ $key }}" value=" {{ $data }}">
+                                    <input type="hidden" name="{{ $key }}" value="{{ $data }}">
                                 @endforeach
+
+                                <input type="hidden" name="secret" value="{{ $secret }}">
                             </form>
                         </div>
                     </div>

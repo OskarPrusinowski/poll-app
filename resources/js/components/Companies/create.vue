@@ -79,7 +79,7 @@ export default {
       store.commit("setCompanySettingsCompanyId", 1);
       this.loading = false;
       this.dialog = false;
-      store.dispatch("getCompanies", this);
+      this.$emit("added");
     },
     getCompanies() {
       store.dispatch("getCompanies", this);
@@ -98,6 +98,11 @@ export default {
   mounted() {
     store.commit("setCompany", {});
     store.dispatch("fetchCompanyInit");
+  },
+  watch: {
+    dialog() {
+      this.$refs.form.reset();
+    },
   },
 };
 </script>

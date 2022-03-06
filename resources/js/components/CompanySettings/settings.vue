@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-if="permissions.settingsShow">
     <v-col cols="12" sm="6">
       <v-card class="mx-auto" height="600" max-width="600">
         <v-card-text
@@ -46,6 +46,7 @@
         color="primary"
         :disabled="anythingChanged"
         @click="updateCompanySettings()"
+        v-if="permissions.settingsManage"
       >
         Zapisz zmiany
       </v-btn>
@@ -73,6 +74,9 @@ export default {
     },
     mailBody() {
       return store.getters.getCompanySettingsMailBody;
+    },
+    permissions() {
+      return store.getters.getUserPermissions;
     },
   },
   methods: {

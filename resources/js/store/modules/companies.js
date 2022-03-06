@@ -1,5 +1,3 @@
-import { Store } from "vuex";
-
 const urlCompany = "http://127.0.0.1:8000/main-api/companies/";
 
 const state = {
@@ -124,8 +122,8 @@ const actions = {
                 console.log(response);
             })
     },
-    getCompaniesCount(state, VueComponent) {
-        VueComponent.$http.get(urlCompany + "count")
+    async getCompaniesCount(state, VueComponent) {
+        await VueComponent.$http.get(urlCompany + "count")
             .then(response => {
                 state.commit("setCompaniesCount", response.data.count)
             })

@@ -21,14 +21,15 @@ Route::get('/complete-registration', [App\Http\Controllers\Auth\RegisterControll
 Route::get('/campaigns/read/{campaignIid}/{contactId}', function () {
     return view('welcome');
 })->where('any', '.*');
+Route::get('/user', function (Request $request) {
+    return $request->user();
+});
 
 Route::middleware(['auth', '2fa'])->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
     Route::get('/{any}', function () {
         return view('welcome');
     })->where('any', '.*');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/google2fa/authenticate', [App\Http\Controllers\Auth\Verifyg2fa::class, 'verify']);

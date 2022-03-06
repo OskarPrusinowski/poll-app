@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Companies\CompaniesService;
 use Illuminate\Http\Request;
 use App\Http\Requests\Companies\DestroyCompanies;
+use App\Http\Requests\Companies\PaginateCompanies;
 
 class CompaniesController extends Controller
 {
@@ -17,7 +18,7 @@ class CompaniesController extends Controller
         $this->companiesService = $companiesService;
     }
 
-    public function index(Request $request)
+    public function index(PaginateCompanies $request)
     {
         $companies = $this->companiesService->getCompaniesList($request->page, $request->total);
         return response()->json(['companies' => $companies]);
